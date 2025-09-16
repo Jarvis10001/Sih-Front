@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -48,12 +49,34 @@ const Navbar = () => {
 
           {/* Desktop CTA Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            <button className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-300">
+            <Link 
+              to="/teacher/login"
+              className="text-gray-500 hover:text-blue-600 font-medium transition-colors duration-300 flex items-center gap-1 text-sm"
+              title="Teacher Portal"
+            >
+              <i className="ri-user-star-line text-sm"></i>
+              Teacher
+            </Link>
+            <Link 
+              to="/admin/login"
+              className="text-gray-500 hover:text-purple-600 font-medium transition-colors duration-300 flex items-center gap-1 text-sm"
+              title="Admin Portal"
+            >
+              <i className="ri-admin-line text-sm"></i>
+              Admin
+            </Link>
+            <Link 
+              to="/login"
+              className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-300"
+            >
               Sign In
-            </button>
-            <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+            </Link>
+            <Link 
+              to="/signup"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+            >
               Get Started
-            </button>
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -101,12 +124,36 @@ const Navbar = () => {
               </a>
             ))}
             <div className="pt-4 space-y-3 border-t border-gray-200">
-              <button className="block w-full text-left px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg font-medium transition-all duration-300">
+              <Link 
+                to="/teacher/login"
+                className="flex w-full text-left px-4 py-3 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg font-medium transition-all duration-300 items-center gap-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <i className="ri-user-star-line"></i>
+                Teacher Portal
+              </Link>
+              <Link 
+                to="/admin/login"
+                className="flex w-full text-left px-4 py-3 text-gray-500 hover:text-purple-600 hover:bg-purple-50 rounded-lg font-medium transition-all duration-300 items-center gap-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <i className="ri-admin-line"></i>
+                Admin Portal
+              </Link>
+              <Link 
+                to="/login"
+                className="block w-full text-left px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg font-medium transition-all duration-300"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 Sign In
-              </button>
-              <button className="block w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg">
+              </Link>
+              <Link 
+                to="/signup"
+                className="block w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg text-center"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 Get Started
-              </button>
+              </Link>
             </div>
           </div>
         </div>

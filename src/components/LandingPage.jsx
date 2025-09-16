@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const LandingPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -124,6 +125,62 @@ const LandingPage = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Portal Access Section */}
+      <section className="py-16 bg-gradient-to-r from-green-50 to-blue-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Access Your Portal</h2>
+            <p className="text-lg text-gray-600">Sign in to your dedicated dashboard based on your role</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            {/* Student Portal */}
+            <Link 
+              to="/login" 
+              className="group bg-white p-8 rounded-2xl border border-gray-200 hover:border-blue-300 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 text-center"
+            >
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                <i className="ri-graduation-cap-line text-2xl"></i>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Student Portal</h3>
+              <p className="text-gray-600 mb-4">Access admission forms, fee payments, dashboard, and academic records</p>
+              <div className="flex items-center justify-center text-blue-600 font-medium group-hover:text-blue-700">
+                Sign In <i className="ri-arrow-right-line ml-2 group-hover:translate-x-1 transition-transform"></i>
+              </div>
+            </Link>
+
+            {/* Teacher Portal */}
+            <Link 
+              to="/teacher/login" 
+              className="group bg-white p-8 rounded-2xl border border-gray-200 hover:border-green-300 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 text-center"
+            >
+              <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                <i className="ri-user-star-line text-2xl"></i>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Teacher Portal</h3>
+              <p className="text-gray-600 mb-4">Manage courses, students, assignments, grades, and attendance</p>
+              <div className="flex items-center justify-center text-green-600 font-medium group-hover:text-green-700">
+                Sign In <i className="ri-arrow-right-line ml-2 group-hover:translate-x-1 transition-transform"></i>
+              </div>
+            </Link>
+
+            {/* Admin Portal */}
+            <Link 
+              to="/admin/login" 
+              className="group bg-white p-8 rounded-2xl border border-gray-200 hover:border-purple-300 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 text-center"
+            >
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                <i className="ri-admin-line text-2xl"></i>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Admin Portal</h3>
+              <p className="text-gray-600 mb-4">Manage teachers, students, admissions, and system administration</p>
+              <div className="flex items-center justify-center text-purple-600 font-medium group-hover:text-purple-700">
+                Sign In <i className="ri-arrow-right-line ml-2 group-hover:translate-x-1 transition-transform"></i>
+              </div>
+            </Link>
           </div>
         </div>
       </section>
@@ -348,6 +405,23 @@ const LandingPage = () => {
                 <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Contact Us</a></li>
               </ul>
+            </div>
+            <div>
+              <h4 className="text-lg font-semibold mb-4">Admin Access</h4>
+              <div className="space-y-3">
+                <Link 
+                  to="/admin/login"
+                  className="flex items-center gap-2 text-gray-400 hover:text-purple-400 transition-colors group"
+                >
+                  <i className="ri-admin-line group-hover:scale-110 transition-transform"></i>
+                  Admin Portal
+                </Link>
+                <div className="text-xs text-gray-500 bg-gray-800 p-2 rounded-lg">
+                  <p className="font-medium text-gray-400 mb-1">Default Login:</p>
+                  <p>Username: <span className="font-mono text-purple-400">admin</span></p>
+                  <p>Password: <span className="font-mono text-purple-400">Admin@123</span></p>
+                </div>
+              </div>
             </div>
             <div>
               <h4 className="text-lg font-semibold mb-4">Contact Info</h4>
