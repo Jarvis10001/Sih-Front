@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import Chatbot from "../Chatbot";
 
 const DashboardHome = () => {
   const userData = JSON.parse(localStorage.getItem('user') || '{}');
+  const [chatOpen, setChatOpen] = useState(false); // toggle chat window
 
   const stats = [
     { title: 'Total Students', value: '1,234', icon: 'ri-user-3-line', color: 'bg-blue-100 text-blue-600' },
@@ -11,7 +13,6 @@ const DashboardHome = () => {
     { title: 'Pending Assignments', value: '23', icon: 'ri-file-list-3-line', color: 'bg-orange-100 text-orange-600' }
   ];
 
-  // Framer Motion variants for staggered animation
   const containerVariants = {
     hidden: {},
     show: {
@@ -64,9 +65,38 @@ const DashboardHome = () => {
           </motion.div>
         ))}
       </motion.div>
+
+      {/* Chatbot Bubble & Window */}
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end space-y-2">
+        {/* Minimized Bubble with Text */}
+        {!chatOpen && (
+          <div 
+            className="flex items-center space-x-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg cursor-pointer"
+            onClick={() => setChatOpen(true)}
+          >
+            <i className="ri-chat-smile-2-fill text-xl"></i>
+            <span className="text-sm font-medium">Hey! I’m your chatbot 🤖</span>
+          </div>
+        )}
+
+        {/* Chat Window */}
+        {chatOpen && (
+          <div className="w-80 h-[500px] shadow-xl rounded-xl overflow-hidden bg-white flex flex-col">
+            {/* Header */}
+            <div className="bg-blue-500 text-white p-3 flex justify-between items-center">
+              <span>Hey! I’m your chatbot 🤖</span>
+              <button onClick={() => setChatOpen(false)} className="font-bold">✕</button>
+            </div>
+
+            {/* Chatbot Component */}
+            <div className="flex-1 overflow-auto">
+              <Chatbot />
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
 
 export default DashboardHome;
-
