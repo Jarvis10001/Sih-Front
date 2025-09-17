@@ -58,6 +58,14 @@ const Navbar = () => {
               Teacher
             </Link>
             <Link 
+              to="/clerk/login"
+              className="text-gray-500 hover:text-green-600 font-medium transition-colors duration-300 flex items-center gap-1 text-sm"
+              title="Clerk Portal"
+            >
+              <i className="ri-user-settings-line text-sm"></i>
+              Clerk
+            </Link>
+            <Link 
               to="/admin/login"
               className="text-gray-500 hover:text-purple-600 font-medium transition-colors duration-300 flex items-center gap-1 text-sm"
               title="Admin Portal"
@@ -131,6 +139,14 @@ const Navbar = () => {
               >
                 <i className="ri-user-star-line"></i>
                 Teacher Portal
+              </Link>
+              <Link 
+                to="/clerk/login"
+                className="flex w-full text-left px-4 py-3 text-gray-500 hover:text-green-600 hover:bg-green-50 rounded-lg font-medium transition-all duration-300 items-center gap-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <i className="ri-user-settings-line"></i>
+                Clerk Portal
               </Link>
               <Link 
                 to="/admin/login"

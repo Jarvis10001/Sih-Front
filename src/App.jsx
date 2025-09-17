@@ -1,5 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import LandingPage from './components/LandingPage'
 import Navbar from './components/Navbar'
 import SignUp from './components/SignUp'
@@ -9,6 +11,8 @@ import AdminLogin from './components/admin/AdminLogin'
 import AdminDashboard from './components/admin/AdminDashboard'
 import TeacherLogin from './components/teacher/TeacherLogin'
 import TeacherDashboard from './components/TeacherDashboard'
+import ClerkLogin from './components/clerk/ClerkLogin'
+import ClerkDashboard from './components/clerk/ClerkDashboard'
 
 function App() {
   return (
@@ -40,6 +44,10 @@ function App() {
         <Route path="/teacher/login" element={<TeacherLogin />} />
         <Route path="/teacher/dashboard/*" element={<TeacherDashboard />} />
         
+        {/* Clerk Routes */}
+        <Route path="/clerk/login" element={<ClerkLogin />} />
+        <Route path="/clerk/dashboard" element={<ClerkDashboard />} />
+        
         {/* Catch all route - redirect to home */}
         <Route path="*" element={
           <>
@@ -48,6 +56,20 @@ function App() {
           </>
         } />
       </Routes>
+      
+      {/* Toast Container for notifications */}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </Router>
   )
 }

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios';
+import { clearAdminTokens } from '../../utils/tokenUtils';
 
 const AdminLogin = () => {
     const navigate = useNavigate();
@@ -26,13 +27,41 @@ const AdminLogin = () => {
         setError('');
 
         try {
+            // Clear any existing admin tokens before login to ensure fresh token
+            clearAdminTokens();
+
             const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/admin/login`, formData);
 
             if (response.data.success) {
-                // Store admin data in localStorage
-                localStorage.setItem('adminToken', response.data.token);
-                localStorage.setItem('adminData', JSON.stringify(response.data.admin));
+                const { token, admin } = response.data;
+                
+                // Validate token structure and expiry
+                try {
+                    const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+                    const expiryTime = new Date(tokenPayload.exp * 1000);
+                    const currentTime = new Date();
+                    
+                    console.log('✅ Fresh token received');
+                    console.log('Token expires:', expiryTime.toLocaleString());
+                    console.log('Valid for:', Math.floor((expiryTime - currentTime) / (1000 * 60 * 60)), 'hours');
+                    
+                    // Ensure token is valid and not expired
+                    if (expiryTime <= currentTime) {
+                        throw new Error('Received expired token');
+                    }
+                } catch (tokenError) {
+                    console.error('Token validation error:', tokenError);
+                    setError('Invalid token received. Please try again.');
+                    return;
+                }
 
+                // Store fresh admin data in localStorage
+                localStorage.setItem('adminToken', token);
+                localStorage.setItem('adminData', JSON.stringify(admin));
+                localStorage.setItem('tokenTimestamp', Date.now().toString());
+
+                console.log('✅ Admin login successful with fresh token');
+                
                 // Redirect to admin dashboard
                 navigate('/admin/dashboard');
             }
