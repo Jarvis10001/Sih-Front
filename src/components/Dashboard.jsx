@@ -9,6 +9,7 @@ import AdmissionForm from './pages/AdmissionFormNew';
 import PaymentPage from './pages/PaymentPage';
 import axios from 'axios';
 
+
 // Create a wrapper component to use the context
 const DashboardContent = () => {
   const { isOpen } = useSidebar();

@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const AdmissionForm = () => {
   const navigate = useNavigate();
-  
+
   // Shared input classes for consistent styling
   const inputClasses = `
     w-full p-3 rounded-xl 
@@ -35,7 +35,7 @@ const AdmissionForm = () => {
     mobileNo: '',
     parentsMobileNo: '',
     email: '',
-    
+
     // Address Information
     address: '',
     city: '',
@@ -43,7 +43,7 @@ const AdmissionForm = () => {
     pincode: '',
     isOtherState: false,
     domicileState: '',
-    
+
     // Academic Information
     course: '',
     branch: '',
@@ -53,23 +53,23 @@ const AdmissionForm = () => {
     twelfthBoard: '',
     twelfthPercentage: '',
     twelfthYearOfPassing: '',
-    
+
     // Entrance Exam Details
     jeeRollNo: '',
     jeeRank: '',
     jeeScore: '',
-    
+
     // Category Information
     category: '',
     isMinority: false,
     minorityType: '',
-    
+
     // Additional Information
     bloodGroup: '',
     aadharNo: '',
     religion: '',
     nationality: 'Indian',
-    
+
     // Emergency Contact
     emergencyContactName: '',
     emergencyContactRelation: '',
@@ -91,14 +91,17 @@ const AdmissionForm = () => {
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [flashMessage, setFlashMessage] = useState('');
 
   // Check if user has already submitted admission form
   useEffect(() => {
+    console.log("check");
+
     const checkAdmissionStatus = async () => {
       try {
         setIsLoading(true);
         const token = localStorage.getItem('token');
-        
+
         if (!token) {
           navigate('/login');
           return;
@@ -129,6 +132,7 @@ const AdmissionForm = () => {
 
     checkAdmissionStatus();
   }, [navigate]);
+
 
   const courseOptions = [
     'B.Tech',
@@ -177,8 +181,87 @@ const AdmissionForm = () => {
       'Chemistry',
       'Mathematics',
       'Biotechnology'
+    ],
+    'BCA': [
+      'Computer Applications',
+      'Software Development',
+      'Web Development',
+      'Database Management',
+      'Network Administration'
+    ],
+    'MCA': [
+      'Computer Applications',
+      'Software Engineering',
+      'Data Science',
+      'Artificial Intelligence',
+      'Cyber Security',
+      'Cloud Computing'
+    ],
+    'MBA': [
+      'Finance',
+      'Marketing',
+      'Human Resource Management',
+      'Operations Management',
+      'Information Technology',
+      'International Business',
+      'Entrepreneurship',
+      'Healthcare Management'
+    ],
+    'B.Com': [
+      'General',
+      'Accounting & Finance',
+      'Banking & Insurance',
+      'Taxation',
+      'E-Commerce',
+      'Computer Applications'
+    ],
+    'M.Com': [
+      'Accounting',
+      'Finance',
+      'Banking',
+      'Taxation',
+      'Business Analytics',
+      'International Business'
+    ],
+    'BA': [
+      'English Literature',
+      'History',
+      'Political Science',
+      'Psychology',
+      'Sociology',
+      'Economics',
+      'Philosophy',
+      'Geography'
+    ],
+    'MA': [
+      'English Literature',
+      'History',
+      'Political Science',
+      'Psychology',
+      'Sociology',
+      'Economics',
+      'Philosophy',
+      'Public Administration'
     ]
   };
+
+  // Helper to resolve branches for a selected course
+  const getBranchesForCourse = (course) => {
+    if (!course) return [];
+
+    // Direct lookup from branchOptions
+    return branchOptions[course] || [];
+  };
+
+  const availableBranches = getBranchesForCourse(formData.course);
+
+  // Minimal debug: log when course changes (only during debugging)
+  useEffect(() => {
+    if (formData.course) {
+      // eslint-disable-next-line no-console
+      console.log('DEBUG: course selected ->', formData.course, '; availableBranches ->', availableBranches);
+    }
+  }, [formData.course]);
 
   const categoryOptions = [
     'General',
@@ -213,11 +296,24 @@ const AdmissionForm = () => {
   };
 
   const handleInputChange = (e) => {
+    console.log('handleInputChange: course changed ->');
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
+
+    setFormData(prev => {
+      const newData = {
+        ...prev,
+        [name]: type === 'checkbox' ? checked : value
+      };
+
+      // Reset branch when course changes
+      if (name === 'course') {
+        // eslint-disable-next-line no-console
+        console.log('handleInputChange: course changed ->', value);
+        newData.branch = '';
+      }
+
+      return newData;
+    });
 
     // Clear error when user starts typing
     if (errors[name]) {
@@ -227,6 +323,36 @@ const AdmissionForm = () => {
       }));
     }
   };
+
+  // Explicit handler for Course select to log selection
+  const handleCourseSelect = (e) => {
+    const value = e.target.value;
+    console.log('Course selected (handler):', value);
+    console.info('Course selected (info):', value);
+
+    // Debug branch lookup
+    const branches = getBranchesForCourse(value);
+    console.log('Branches found for course:', value, '→', branches);
+
+    // Show ephemeral on-page flash to help verify selection
+    if (value) {
+      setFlashMessage(`Selected: ${value} (${branches.length} branches)`);
+      setTimeout(() => setFlashMessage(''), 2500);
+    }
+    handleInputChange(e);
+  };
+
+  // Handler for Category select to log and alert selection
+  const handleCategorySelect = (e) => {
+    const value = e.target.value;
+    console.log('Category selected (handler):', value);
+    if (value) {
+      setFlashMessage(`Selected category: ${value}`);
+      setTimeout(() => setFlashMessage(''), 2500);
+    }
+    handleInputChange(e);
+  };
+
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
@@ -272,7 +398,7 @@ const AdmissionForm = () => {
     e.preventDefault();
     e.stopPropagation();
     e.currentTarget.classList.remove('border-[#4CAF50]', 'bg-[#4CAF50]/5');
-    
+
     const file = e.dataTransfer.files[0];
     if (file) {
       const error = validateFile(file);
@@ -306,7 +432,7 @@ const AdmissionForm = () => {
     const requiredFields = [
       'name', 'fatherName', 'motherName', 'gender', 'dateOfBirth',
       'mobileNo', 'parentsMobileNo', 'email', 'address', 'city', 'state',
-      'pincode', 'course', 'branch', 'tenthBoard', 'tenthPercentage',
+      'pincode', 'course', 'tenthBoard', 'tenthPercentage',
       'tenthYearOfPassing', 'twelfthBoard', 'twelfthPercentage',
       'twelfthYearOfPassing', 'category', 'aadharNo'
     ];
@@ -370,7 +496,7 @@ const AdmissionForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -379,7 +505,7 @@ const AdmissionForm = () => {
 
     try {
       const formDataToSend = new FormData();
-      
+
       // Append form data
       Object.keys(formData).forEach(key => {
         formDataToSend.append(key, formData[key]);
@@ -523,7 +649,6 @@ const AdmissionForm = () => {
                     <option value="Female">Female</option>
                     <option value="Other">Other</option>
                   </select>
-                  {errors.gender && <p className="text-red-500 text-xs mt-1">{errors.gender}</p>}
                 </div>
 
                 <div>
@@ -716,8 +841,8 @@ const AdmissionForm = () => {
                   <select
                     name="course"
                     value={formData.course}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                    onChange={handleCourseSelect}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   >
                     <option value="">Select Course</option>
                     {courseOptions.map(course => (
@@ -729,19 +854,80 @@ const AdmissionForm = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Branch <span className="text-red-500">*</span>
+                    Branch <span className="text-gray-500">(Optional)</span>
                   </label>
                   <select
                     name="branch"
                     value={formData.branch}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
-                    disabled={!formData.course}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   >
                     <option value="">Select Branch</option>
-                    {formData.course && branchOptions[formData.course]?.map(branch => (
-                      <option key={branch} value={branch}>{branch}</option>
-                    ))}
+                    {/* B.Tech Branches */}
+                    <option value="Computer Science Engineering">Computer Science Engineering</option>
+                    <option value="Information Technology">Information Technology</option>
+                    <option value="Electrical Engineering">Electrical Engineering</option>
+                    <option value="Mechanical Engineering">Mechanical Engineering</option>
+                    <option value="Civil Engineering">Civil Engineering</option>
+                    <option value="Electronics & Communication">Electronics & Communication</option>
+                    <option value="Chemical Engineering">Chemical Engineering</option>
+                    <option value="Aerospace Engineering">Aerospace Engineering</option>
+
+                    {/* M.Tech Branches */}
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="VLSI Design">VLSI Design</option>
+                    <option value="Power Systems">Power Systems</option>
+                    <option value="Structural Engineering">Structural Engineering</option>
+                    <option value="Thermal Engineering">Thermal Engineering</option>
+
+                    {/* B.Sc/M.Sc Branches */}
+                    <option value="Physics">Physics</option>
+                    <option value="Chemistry">Chemistry</option>
+                    <option value="Mathematics">Mathematics</option>
+                    <option value="Biology">Biology</option>
+                    <option value="Biotechnology">Biotechnology</option>
+
+                    {/* BCA/MCA Branches */}
+                    <option value="Computer Applications">Computer Applications</option>
+                    <option value="Software Development">Software Development</option>
+                    <option value="Web Development">Web Development</option>
+                    <option value="Database Management">Database Management</option>
+                    <option value="Network Administration">Network Administration</option>
+                    <option value="Software Engineering">Software Engineering</option>
+                    <option value="Data Science">Data Science</option>
+                    <option value="Artificial Intelligence">Artificial Intelligence</option>
+                    <option value="Cyber Security">Cyber Security</option>
+                    <option value="Cloud Computing">Cloud Computing</option>
+
+                    {/* MBA Branches */}
+                    <option value="Finance">Finance</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="Human Resource Management">Human Resource Management</option>
+                    <option value="Operations Management">Operations Management</option>
+                    <option value="International Business">International Business</option>
+                    <option value="Entrepreneurship">Entrepreneurship</option>
+                    <option value="Healthcare Management">Healthcare Management</option>
+
+                    {/* B.Com/M.Com Branches */}
+                    <option value="General">General</option>
+                    <option value="Accounting & Finance">Accounting & Finance</option>
+                    <option value="Banking & Insurance">Banking & Insurance</option>
+                    <option value="Taxation">Taxation</option>
+                    <option value="E-Commerce">E-Commerce</option>
+                    <option value="Accounting">Accounting</option>
+                    <option value="Banking">Banking</option>
+                    <option value="Business Analytics">Business Analytics</option>
+
+                    {/* BA/MA Branches */}
+                    <option value="English Literature">English Literature</option>
+                    <option value="History">History</option>
+                    <option value="Political Science">Political Science</option>
+                    <option value="Psychology">Psychology</option>
+                    <option value="Sociology">Sociology</option>
+                    <option value="Economics">Economics</option>
+                    <option value="Philosophy">Philosophy</option>
+                    <option value="Geography">Geography</option>
+                    <option value="Public Administration">Public Administration</option>
                   </select>
                   {errors.branch && <p className="text-red-500 text-xs mt-1">{errors.branch}</p>}
                 </div>
@@ -753,8 +939,8 @@ const AdmissionForm = () => {
                   <select
                     name="category"
                     value={formData.category}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                    onChange={handleCategorySelect}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   >
                     <option value="">Select Category</option>
                     {categoryOptions.map(category => (
@@ -763,6 +949,23 @@ const AdmissionForm = () => {
                   </select>
                   {errors.category && <p className="text-red-500 text-xs mt-1">{errors.category}</p>}
                 </div>
+
+                {/* Visible debug indicator */}
+                <div className="lg:col-span-3 mt-2 text-sm text-gray-600">
+                  <span className="font-medium">Selected Course:</span> {formData.course || '—'}
+                  <span className="ml-4 font-medium">Available Branches:</span> {getBranchesForCourse(formData.course).length}
+                  {formData.branch && (
+                    <>
+                      <span className="ml-4 font-medium">Selected Branch:</span>
+                      <span className="text-green-600">{formData.branch}</span>
+                    </>
+                  )}
+                </div>
+                {flashMessage && (
+                  <div className="lg:col-span-3 mt-2 inline-block px-3 py-1 bg-yellow-100 text-yellow-800 rounded-lg text-sm">
+                    {flashMessage}
+                  </div>
+                )}
 
                 {/* 10th Class Details */}
                 <div className="lg:col-span-3">

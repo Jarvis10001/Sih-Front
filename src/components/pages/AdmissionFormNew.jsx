@@ -39,6 +39,8 @@ const AdmissionForm = () => {
     const [submitted, setSubmitted] = useState(false);
     const [errors, setErrors] = useState({});
     const [filePreviews, setFilePreviews] = useState({});
+    const [selectedCourse, setSelectedCourse] = useState('');
+    const [selectedBranch, setSelectedBranch] = useState('');
 
     const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
     const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
@@ -51,7 +53,14 @@ const AdmissionForm = () => {
         'B.Tech': ['Computer Science Engineering', 'Information Technology', 'Electrical Engineering', 'Mechanical Engineering', 'Civil Engineering', 'Electronics & Communication', 'Chemical Engineering', 'Aerospace Engineering'],
         'M.Tech': ['Computer Science', 'Information Technology', 'VLSI Design', 'Power Systems', 'Structural Engineering', 'Thermal Engineering'],
         'B.Sc': ['Computer Science', 'Physics', 'Chemistry', 'Mathematics', 'Biology', 'Biotechnology'],
-        'M.Sc': ['Computer Science', 'Physics', 'Chemistry', 'Mathematics', 'Biotechnology']
+        'M.Sc': ['Computer Science', 'Physics', 'Chemistry', 'Mathematics', 'Biotechnology'],
+        'BCA': ['Computer Applications', 'Software Development', 'Web Development', 'Database Management', 'Network Administration'],
+        'MCA': ['Computer Applications', 'Software Engineering', 'Data Science', 'Artificial Intelligence', 'Cyber Security', 'Cloud Computing'],
+        'MBA': ['Finance', 'Marketing', 'Human Resource Management', 'Operations Management', 'Information Technology', 'International Business', 'Entrepreneurship', 'Healthcare Management'],
+        'B.Com': ['General', 'Accounting & Finance', 'Banking & Insurance', 'Taxation', 'E-Commerce', 'Computer Applications'],
+        'M.Com': ['Accounting', 'Finance', 'Banking', 'Taxation', 'Business Analytics', 'International Business'],
+        'BA': ['English Literature', 'History', 'Political Science', 'Psychology', 'Sociology', 'Economics', 'Philosophy', 'Geography'],
+        'MA': ['English Literature', 'History', 'Political Science', 'Psychology', 'Sociology', 'Economics', 'Philosophy', 'Public Administration']
     };
 
     const categoryOptions = ['General', 'OBC-NCL', 'SC', 'ST', 'EWS'];
@@ -89,7 +98,7 @@ const AdmissionForm = () => {
 
                 // Check if user has already submitted admission form
                 const response = await axios.get(
-                    `${import.meta.env.VITE_BACKEND_URL}/api/admission/status`,
+                    `${import.meta.env.VITE_BACKEND_URL}/api/admission/form`,
                     {
                         headers: { Authorization: `Bearer ${token}` }
                     }
@@ -186,45 +195,200 @@ const AdmissionForm = () => {
         }
     };
 
+    const handleCourseChange = (e) => {
+        const course = e.target.value;
+        setSelectedCourse(course);
+        setSelectedBranch(''); // Reset branch when course changes
+    };
+
+    const handleBranchChange = (e) => {
+        setSelectedBranch(e.target.value);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        const formElements = e.target.elements;
+        const validationErrors = {};
+        const missingFields = [];
+        const missingDocuments = [];
+        
+        // Define required form fields with their display names
+        const requiredFields = {
+            'name': 'Full Name',
+            'father-name': 'Father\'s Name',
+            'mother-name': 'Mother\'s Name',
+            'gender': 'Gender',
+            'dob': 'Date of Birth',
+            'mobile': 'Mobile Number',
+            'parents-mobile': 'Parents Mobile Number',
+            'email': 'Email Address',
+            'address': 'Address',
+            'city': 'City',
+            'state': 'State',
+            'pincode': 'PIN Code',
+            'course': 'Course',
+            'branch': 'Branch',
+            'tenth-board': '10th Board',
+            'tenth-percentage': '10th Percentage',
+            'tenth-year': '10th Year of Passing',
+            'twelfth-board': '12th Board',
+            'twelfth-percentage': '12th Percentage',
+            'twelfth-year': '12th Year of Passing',
+            'category': 'Category',
+            'aadhar': 'Aadhar Number'
+        };
+
+        // Check required form fields
+        Object.keys(requiredFields).forEach(fieldName => {
+            const element = formElements.namedItem(fieldName);
+            const value = element?.value?.toString().trim();
+            
+            if (!value || value === '') {
+                validationErrors[fieldName] = `${requiredFields[fieldName]} is required`;
+                missingFields.push(requiredFields[fieldName]);
+            }
+        });
+
+        // Email validation
+        const emailElement = formElements.namedItem('email');
+        if (emailElement?.value) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailElement.value)) {
+                validationErrors['email'] = 'Please enter a valid email address';
+                if (!missingFields.includes('Valid Email Address')) {
+                    missingFields.push('Valid Email Address');
+                }
+            }
+        }
+
+        // Mobile number validation
+        const mobileElement = formElements.namedItem('mobile');
+        if (mobileElement?.value) {
+            const mobileRegex = /^[6-9]\d{9}$/;
+            if (!mobileRegex.test(mobileElement.value)) {
+                validationErrors['mobile'] = 'Please enter a valid 10-digit mobile number';
+                if (!missingFields.includes('Valid Mobile Number')) {
+                    missingFields.push('Valid Mobile Number');
+                }
+            }
+        }
+
+        // Parents mobile validation
+        const parentsMobileElement = formElements.namedItem('parents-mobile');
+        if (parentsMobileElement?.value) {
+            const mobileRegex = /^[6-9]\d{9}$/;
+            if (!mobileRegex.test(parentsMobileElement.value)) {
+                validationErrors['parents-mobile'] = 'Please enter a valid 10-digit parents mobile number';
+                if (!missingFields.includes('Valid Parents Mobile Number')) {
+                    missingFields.push('Valid Parents Mobile Number');
+                }
+            }
+        }
+
+        // Aadhar validation
+        const aadharElement = formElements.namedItem('aadhar');
+        if (aadharElement?.value) {
+            const aadharRegex = /^\d{12}$/;
+            if (!aadharRegex.test(aadharElement.value)) {
+                validationErrors['aadhar'] = 'Please enter a valid 12-digit Aadhar number';
+                if (!missingFields.includes('Valid Aadhar Number')) {
+                    missingFields.push('Valid Aadhar Number');
+                }
+            }
+        }
+
+        // Document validation with display names
+        const requiredDocuments = {
+            'tenthMarksheet': '10th Class Marksheet',
+            'twelfthMarksheet': '12th Class Marksheet',
+            'medicalCertificate': 'Medical Fitness Certificate',
+            'aadharCard': 'Aadhar Card',
+            'photo': 'Passport Size Photo'
+        };
+        
+        Object.keys(requiredDocuments).forEach(doc => {
+            if (!documents[doc]) {
+                validationErrors[doc] = `${requiredDocuments[doc]} is required`;
+                missingDocuments.push(requiredDocuments[doc]);
+            }
+        });
+        
+        // If there are validation errors, show detailed message and don't submit
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            
+            // Create detailed error message
+            let errorMessage = 'Please complete the following before submitting:\n\n';
+            
+            if (missingFields.length > 0) {
+                errorMessage += 'Missing/Invalid Fields:\n';
+                missingFields.forEach((field, index) => {
+                    errorMessage += `${index + 1}. ${field}\n`;
+                });
+                errorMessage += '\n';
+            }
+            
+            if (missingDocuments.length > 0) {
+                errorMessage += 'Missing Documents:\n';
+                missingDocuments.forEach((doc, index) => {
+                    errorMessage += `${index + 1}. ${doc}\n`;
+                });
+            }
+            
+            alert(errorMessage);
+            setIsUploading(false);
+            return;
+        }
+        
         setIsUploading(true);
         
         try {
             const formData = new FormData();
-            const formElements = e.target.elements;
             
-            // Extract form data
+            // Extract form data and map to backend expected field names
             const admissionData = {
+                // Personal Information - backend expects these exact field names
                 name: formElements.namedItem("name").value,
                 fatherName: formElements.namedItem("father-name").value,
                 motherName: formElements.namedItem("mother-name").value,
                 gender: formElements.namedItem("gender").value,
                 dateOfBirth: formElements.namedItem("dob").value,
-                mobileNo: formElements.namedItem("mobile").value,
-                parentsMobileNo: formElements.namedItem("parents-mobile").value,
+                phoneNumber: formElements.namedItem("mobile").value,  // backend expects phoneNumber, not mobileNo
                 email: formElements.namedItem("email").value,
-                address: formElements.namedItem("address").value,
+                aadharNumber: formElements.namedItem("aadhar").value,  // backend expects aadharNumber, not aadharNo
+                nationality: formElements.namedItem("nationality")?.value || 'Indian',
+                religion: formElements.namedItem("religion")?.value || '',
+                category: formElements.namedItem("category").value,
+                
+                // Address Information - backend expects these field names
+                permanentAddress: formElements.namedItem("address").value,  // backend expects permanentAddress
+                currentAddress: formElements.namedItem("address").value,   // using same address for both
                 city: formElements.namedItem("city").value,
                 state: formElements.namedItem("state").value,
                 pincode: formElements.namedItem("pincode").value,
-                isOtherState: formElements.namedItem("is-other-state")?.checked || false,
-                course: formElements.namedItem("course").value,
-                branch: formElements.namedItem("branch").value,
+                
+                // Educational Information - backend expects these field names
                 tenthBoard: formElements.namedItem("tenth-board").value,
+                tenthYear: formElements.namedItem("tenth-year").value,      // backend expects tenthYear, not tenthYearOfPassing
                 tenthPercentage: formElements.namedItem("tenth-percentage").value,
-                tenthYearOfPassing: formElements.namedItem("tenth-year").value,
                 twelfthBoard: formElements.namedItem("twelfth-board").value,
+                twelfthYear: formElements.namedItem("twelfth-year").value,  // backend expects twelfthYear, not twelfthYearOfPassing
                 twelfthPercentage: formElements.namedItem("twelfth-percentage").value,
-                twelfthYearOfPassing: formElements.namedItem("twelfth-year").value,
-                jeeRollNo: formElements.namedItem("jee-roll")?.value || '',
                 jeeRank: formElements.namedItem("jee-rank")?.value || '',
                 jeeScore: formElements.namedItem("jee-score")?.value || '',
-                category: formElements.namedItem("category").value,
-                aadharNo: formElements.namedItem("aadhar").value,
-                bloodGroup: formElements.namedItem("blood-group")?.value || '',
-                religion: formElements.namedItem("religion")?.value || '',
-                nationality: formElements.namedItem("nationality")?.value || 'Indian'
+                
+                // Course Information - backend expects these field names
+                preferredCourse: formElements.namedItem("course").value,    // backend expects preferredCourse, not course
+                preferredBranch: formElements.namedItem("branch").value,    // backend expects preferredBranch, not branch
+                
+                // Additional Information
+                emergencyContact: formElements.namedItem("parents-mobile").value,
+                medicalInfo: formElements.namedItem("blood-group")?.value || '',
+                hostelRequired: 'false',  // default value
+                transportRequired: 'false',  // default value
+                guardianOccupation: '',  // default value
+                annualIncome: ''  // default value
             };
 
             // Append form data
@@ -253,6 +417,12 @@ const AdmissionForm = () => {
 
             if (response.data.success) {
                 setSubmitted(true);
+                // Update localStorage to indicate form has been submitted
+                localStorage.setItem('admissionSubmitted', 'true');
+                // Show success message briefly, then redirect to payment
+                setTimeout(() => {
+                    navigate('/dashboard/payment');
+                }, 2000); // Wait 2 seconds to show success message, then redirect
             }
         } catch (error) {
             console.error('Form submission error:', error);
@@ -272,26 +442,76 @@ const AdmissionForm = () => {
 
     if (submitted) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50">
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="bg-white p-8 rounded-xl shadow-lg text-center max-w-md mx-auto"
-                >
-                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i className="ri-check-line text-2xl text-green-600"></i>
-                    </div>
-                    <h2 className="text-2xl font-bold text-gray-800 mb-2">Form Submitted Successfully!</h2>
-                    <p className="text-gray-600 mb-4">
-                        Your admission form has been submitted. You will receive a confirmation email shortly.
-                    </p>
-                    <button
-                        onClick={() => navigate('/dashboard')}
-                        className="px-6 py-2 bg-[#4CAF50] text-white rounded-lg hover:bg-[#45a049] transition-colors"
+            <div className="min-h-screen bg-gray-50 py-8">
+                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="bg-white rounded-xl shadow-lg overflow-hidden"
                     >
-                        Back to Dashboard
-                    </button>
-                </motion.div>
+                        {/* Header */}
+                        <div className="bg-gradient-to-r from-[#4CAF50] to-[#45a049] px-8 py-6">
+                            <h1 className="text-3xl font-bold text-white">Admission Status</h1>
+                            <p className="text-green-100 mt-2">Your admission form has been processed</p>
+                        </div>
+
+                        <div className="p-8">
+                            <div className="text-center">
+                                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                    <i className="ri-check-line text-3xl text-green-600"></i>
+                                </div>
+                                
+                                <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                                    Admission Form Already Submitted!
+                                </h2>
+                                
+                                <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
+                                    <p className="text-green-800 mb-4">
+                                        <i className="ri-information-line mr-2"></i>
+                                        Your admission form has been successfully submitted and is being processed by our admissions team.
+                                    </p>
+                                    <div className="text-sm text-green-700">
+                                        <p className="mb-2">
+                                            <strong>Next Steps:</strong>
+                                        </p>
+                                        <ul className="text-left list-disc list-inside space-y-1">
+                                            <li>Complete your fee payment to secure your admission</li>
+                                            <li>Check your email for updates on application status</li>
+                                            <li>Keep your application number safe for future reference</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                                    <button
+                                        onClick={() => navigate('/dashboard/payment')}
+                                        className="px-6 py-3 bg-[#4CAF50] text-white rounded-lg hover:bg-[#45a049] transition-colors font-medium"
+                                    >
+                                        <i className="ri-bank-card-line mr-2"></i>
+                                        Proceed to Payment
+                                    </button>
+                                    
+                                    <button
+                                        onClick={() => navigate('/dashboard')}
+                                        className="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium"
+                                    >
+                                        <i className="ri-dashboard-line mr-2"></i>
+                                        Back to Dashboard
+                                    </button>
+                                </div>
+
+                                <div className="mt-8 pt-6 border-t border-gray-200">
+                                    <p className="text-sm text-gray-600">
+                                        Need help? Contact our admissions office at 
+                                        <a href="mailto:admissions@college.edu" className="text-[#4CAF50] hover:text-[#45a049] ml-1">
+                                            admissions@college.edu
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </motion.div>
+                </div>
             </div>
         );
     }
@@ -523,7 +743,13 @@ const AdmissionForm = () => {
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                         <div className="space-y-2">
                                             <label className="text-[#333333] font-medium block">Course*</label>
-                                            <select className={selectClasses} name="course" required>
+                                            <select 
+                                                className={selectClasses} 
+                                                name="course" 
+                                                value={selectedCourse}
+                                                onChange={handleCourseChange}
+                                                required
+                                            >
                                                 <option value="">Select Course</option>
                                                 {courseOptions.map(course => (
                                                     <option key={course} value={course}>{course}</option>
@@ -532,9 +758,22 @@ const AdmissionForm = () => {
                                         </div>
                                         <div className="space-y-2">
                                             <label className="text-[#333333] font-medium block">Branch*</label>
-                                            <select className={selectClasses} name="branch" required>
-                                                <option value="">Select Branch</option>
-                                                {/* This would be populated based on selected course */}
+                                            <select 
+                                                className={selectClasses} 
+                                                name="branch" 
+                                                value={selectedBranch}
+                                                onChange={handleBranchChange}
+                                                required
+                                                disabled={!selectedCourse}
+                                            >
+                                                <option value="">
+                                                    {selectedCourse ? 'Select Branch' : 'First select a course'}
+                                                </option>
+                                                {selectedCourse && branchOptions[selectedCourse] && 
+                                                    branchOptions[selectedCourse].map((branch, index) => (
+                                                        <option key={index} value={branch}>{branch}</option>
+                                                    ))
+                                                }
                                             </select>
                                         </div>
                                         <div className="space-y-2">
@@ -668,7 +907,6 @@ const AdmissionForm = () => {
                                             onDragLeave={handleDragLeave}
                                             onDrop={(e) => handleDrop(e, 'tenthMarksheet')}
                                             error={errors.tenthMarksheet}
-                                            required
                                         />
                                         <DocumentUpload
                                             label="12th Class Marksheet*"
@@ -680,7 +918,6 @@ const AdmissionForm = () => {
                                             onDragLeave={handleDragLeave}
                                             onDrop={(e) => handleDrop(e, 'twelfthMarksheet')}
                                             error={errors.twelfthMarksheet}
-                                            required
                                         />
                                         <DocumentUpload
                                             label="Medical Fitness Certificate*"
@@ -692,7 +929,6 @@ const AdmissionForm = () => {
                                             onDragLeave={handleDragLeave}
                                             onDrop={(e) => handleDrop(e, 'medicalCertificate')}
                                             error={errors.medicalCertificate}
-                                            required
                                         />
                                         <DocumentUpload
                                             label="JEE Result (For Engineering)"
@@ -726,7 +962,6 @@ const AdmissionForm = () => {
                                             onDragLeave={handleDragLeave}
                                             onDrop={(e) => handleDrop(e, 'aadharCard')}
                                             error={errors.aadharCard}
-                                            required
                                         />
                                         <DocumentUpload
                                             label="Passport Size Photo*"
@@ -738,7 +973,6 @@ const AdmissionForm = () => {
                                             onDragLeave={handleDragLeave}
                                             onDrop={(e) => handleDrop(e, 'photo')}
                                             error={errors.photo}
-                                            required
                                             accept=".jpg,.jpeg,.png"
                                         />
                                         <DocumentUpload

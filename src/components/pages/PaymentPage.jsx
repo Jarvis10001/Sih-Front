@@ -10,6 +10,7 @@ const PaymentPage = () => {
     const [user, setUser] = useState(null);
     const [admissionData, setAdmissionData] = useState(null);
     const [paymentStatus, setPaymentStatus] = useState(null);
+    const [error, setError] = useState(null);
     const [fees, setFees] = useState({
         admissionFee: 50000,
         registrationFee: 5000,
@@ -48,7 +49,7 @@ const PaymentPage = () => {
 
                 // Check if admission form is submitted
                 const admissionResponse = await axios.get(
-                    `${import.meta.env.VITE_BACKEND_URL}/api/admission/status`,
+                    `${import.meta.env.VITE_BACKEND_URL}/api/admission/form`,
                     {
                         headers: { Authorization: `Bearer ${token}` }
                     }
@@ -107,41 +108,61 @@ const PaymentPage = () => {
     };
 
     const handlePayment = async () => {
+        if (paymentLoading) return;
+        
         setPaymentLoading(true);
+        setError(null);
 
         try {
+            // Validate required data
+            if (!admissionData) {
+                throw new Error('Admission data not found. Please refresh the page.');
+            }
+
+            if (!user) {
+                throw new Error('User data not found. Please login again.');
+            }
+
             // Load Razorpay script
             const scriptLoaded = await loadRazorpayScript();
             if (!scriptLoaded) {
-                alert('Failed to load payment gateway. Please try again.');
-                return;
+                throw new Error('Failed to load payment gateway. Please check your internet connection and try again.');
             }
 
             const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('Authentication token not found. Please login again.');
+            }
 
             // Create payment order
+            const shortAdmissionId = admissionData._id.slice(-8);
+            const shortTimestamp = Date.now().toString().slice(-6);
             const orderResponse = await axios.post(
                 `${import.meta.env.VITE_BACKEND_URL}/api/payment/create-order`,
                 {
                     amount: fees.total,
                     currency: 'INR',
-                    receipt: `admission_${admissionData.id}_${Date.now()}`
+                    receipt: `adm_${shortAdmissionId}_${shortTimestamp}`
                 },
                 {
                     headers: { Authorization: `Bearer ${token}` }
                 }
             );
 
+            if (!orderResponse.data.success) {
+                throw new Error(orderResponse.data.message || 'Failed to create payment order');
+            }
+
             const { order } = orderResponse.data;
 
             // Razorpay options
             const options = {
-                key: import.meta.env.VITE_RAZORPAY_KEY_ID, // Your Razorpay key ID
+                key: import.meta.env.VITE_RAZORPAY_KEY_ID,
                 amount: order.amount,
                 currency: order.currency,
                 name: 'College ERP',
                 description: 'Admission Fee Payment',
-                image: '/logo.png', // Your college logo
+                image: '/logo.png',
                 order_id: order.id,
                 prefill: {
                     name: user?.name || admissionData?.personalInfo?.name,
@@ -159,8 +180,7 @@ const PaymentPage = () => {
                             {
                                 razorpay_order_id: response.razorpay_order_id,
                                 razorpay_payment_id: response.razorpay_payment_id,
-                                razorpay_signature: response.razorpay_signature,
-                                admission_id: admissionData.id
+                                razorpay_signature: response.razorpay_signature
                             },
                             {
                                 headers: { Authorization: `Bearer ${token}` }
@@ -173,31 +193,43 @@ const PaymentPage = () => {
                                 paymentId: response.razorpay_payment_id,
                                 orderId: response.razorpay_order_id,
                                 amount: fees.total,
-                                paidAt: new Date()
+                                paidAt: new Date().toISOString()
                             });
-                            alert('Payment successful! Your admission is confirmed.');
+                            
+                            // Show success notification
+                            const successMessage = 'Payment successful! Your admission is confirmed.';
+                            alert(successMessage);
                         } else {
-                            alert('Payment verification failed. Please contact support.');
+                            throw new Error('Payment verification failed');
                         }
                     } catch (error) {
                         console.error('Payment verification error:', error);
-                        alert('Payment verification failed. Please contact support.');
+                        const errorMessage = error.response?.data?.message || 'Payment verification failed. Please contact support with your payment ID: ' + response.razorpay_payment_id;
+                        alert(errorMessage);
+                        setError(errorMessage);
                     }
                 },
                 modal: {
                     ondismiss: function () {
-                        console.log('Payment modal closed');
+                        console.log('Payment modal closed by user');
+                        setPaymentLoading(false);
                     }
                 }
             };
+
+            // Validate Razorpay key
+            if (!options.key) {
+                throw new Error('Payment gateway configuration error. Please contact support.');
+            }
 
             const razorpay = new window.Razorpay(options);
             razorpay.open();
 
         } catch (error) {
             console.error('Payment error:', error);
-            alert('Failed to initiate payment. Please try again.');
-        } finally {
+            const errorMessage = error.response?.data?.message || error.message || 'Failed to initiate payment. Please try again.';
+            setError(errorMessage);
+            alert(errorMessage);
             setPaymentLoading(false);
         }
     };
@@ -267,8 +299,37 @@ const PaymentPage = () => {
                                 <div>
                                     <p className="text-sm text-[#6C757D]">Payment Date</p>
                                     <p className="font-medium text-[#333333]">
-                                        {new Date(paymentStatus.paidAt).toLocaleDateString()}
+                                        {new Date(paymentStatus.paidAt).toLocaleDateString('en-IN', {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric',
+                                            hour: '2-digit',
+                                            minute: '2-digit'
+                                        })}
                                     </p>
+                                </div>
+                            </div>
+                            
+                            {/* Student Details */}
+                            <div className="mt-6 pt-6 border-t border-gray-200">
+                                <h5 className="text-md font-semibold text-[#333333] mb-3">Student Details</h5>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <p className="text-sm text-[#6C757D]">Student Name</p>
+                                        <p className="font-medium text-[#333333]">{admissionData?.personalInfo?.name}</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-[#6C757D]">Course</p>
+                                        <p className="font-medium text-[#333333]">{admissionData?.academicInfo?.course}</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-[#6C757D]">Branch</p>
+                                        <p className="font-medium text-[#333333]">{admissionData?.academicInfo?.branch}</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-[#6C757D]">Application Number</p>
+                                        <p className="font-medium text-[#333333]">{admissionData?.applicationNumber}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -295,6 +356,27 @@ const PaymentPage = () => {
 
     return (
         <div className="max-w-4xl mx-auto my-10 px-4">
+            {/* Error banner */}
+            {error && (
+                <div className="mb-6 bg-red-50 border border-red-200 rounded-xl p-4 shadow-sm">
+                    <div className="flex items-center gap-3">
+                        <div className="flex-shrink-0">
+                            <i className="ri-error-warning-line text-xl text-red-600"></i>
+                        </div>
+                        <div>
+                            <h4 className="text-red-800 font-medium">Payment Error</h4>
+                            <p className="text-red-700 text-sm">{error}</p>
+                        </div>
+                        <button
+                            onClick={() => setError(null)}
+                            className="ml-auto text-red-600 hover:text-red-800"
+                        >
+                            <i className="ri-close-line text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            )}
+
             {/* Notification banner */}
             <div className="mb-6 bg-[#4CAF50]/10 border border-[#4CAF50]/20 rounded-xl p-4 shadow-sm">
                 <div className="flex items-center gap-3">
