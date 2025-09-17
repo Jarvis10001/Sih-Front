@@ -35,7 +35,7 @@ const Sidebar = () => {
     <>
       {/* Mobile menu button */}
       <button
-        className="fixed top-4 left-4 z-40 p-2 rounded-xl bg-[#4CAF50] text-white shadow-lg md:hidden hover:bg-[#45a049] transition-colors duration-300"
+        className="fixed top-4 left-4 z-40 p-2 rounded-xl bg-[#3B82F6] text-white shadow-lg md:hidden hover:bg-[#06B6D4] transition-colors duration-300"
         onClick={() => setIsOpen(true)}
       >
         <i className="ri-menu-line text-xl" />
@@ -51,11 +51,11 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <aside className={`fixed top-0 left-0 z-50 h-full flex flex-col transition-all duration-300 ease-in-out
-        bg-gradient-to-b from-[#4CAF50] to-[#45a049] border-r border-white/10
+        bg-gradient-to-b from-[#3B82F6] to-[#06B6D4] border-r border-white/20
         ${isOpen ? 'w-72' : 'w-20'}`}
       >
         {/* Header */}
-        <div className="flex-shrink-0 p-5 border-b border-white/10 bg-[#45a049]/50 overflow-hidden">
+        <div className="flex-shrink-0 p-5 border-b border-white/20 bg-[#3B82F6]/70 overflow-hidden">
           <Link to="/dashboard" className="flex items-center gap-2">
             <div className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-colors duration-300">
               <i className="ri-graduation-cap-line text-xl text-white" />
@@ -63,10 +63,10 @@ const Sidebar = () => {
             <span className={`text-xl font-bold text-white transition-opacity duration-300 ${
               isOpen ? 'opacity-100' : 'opacity-0'
             }`}>
-              College<span className="text-green-100">ERP</span>
+              College<span className="text-blue-100">ERP</span>
             </span>
           </Link>
-          
+
           {/* Close button for mobile */}
           <button
             className="absolute top-4 right-4 p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors duration-300 md:hidden"
@@ -77,7 +77,7 @@ const Sidebar = () => {
         </div>
 
         {/* User Profile Section */}
-        <div className={`p-4 border-b border-white/10 ${isOpen ? 'block' : 'hidden'}`}>
+        <div className={`p-4 border-b border-white/20 ${isOpen ? 'block' : 'hidden'}`}>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
               <i className="ri-user-line text-white text-lg" />
@@ -86,7 +86,7 @@ const Sidebar = () => {
               <p className="text-white font-medium text-sm truncate">
                 {userData?.name || 'User'}
               </p>
-              <p className="text-green-100 text-xs truncate">
+              <p className="text-blue-100 text-xs truncate">
                 {userData?.email || 'user@college.edu'}
               </p>
             </div>
@@ -122,7 +122,7 @@ const Sidebar = () => {
         </nav>
 
         {/* Logout Button */}
-        <div className="p-4 border-t border-white/10">
+        <div className="p-4 border-t border-white/20">
           <button
             onClick={handleLogout}
             className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 hover:text-white transition-all duration-300"
@@ -141,3 +141,4 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+
