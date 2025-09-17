@@ -33,6 +33,7 @@
     "react-hot-toast": "^2.5.2",
     "react-i18next": "^15.4.0",
     "react-router-dom": "^7.9.1",
+    "react-toastify": "^11.0.5",
     "require": "^2.4.20",
     "swiper": "^11.2.10"
   },

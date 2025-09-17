@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import TeacherForm from './TeacherForm';
 import ClerkForm from './ClerkForm';
+import { validateAdminToken, getAdminTokenInfo } from '../../utils/tokenUtils';
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
@@ -82,21 +83,38 @@ const AdminDashboard = () => {
     });
 
     useEffect(() => {
-        // Check if admin is logged in
-        const token = localStorage.getItem('adminToken');
-        const admin = localStorage.getItem('adminData');
-        
-        if (!token || !admin) {
-            navigate('/admin/login');
+        // Validate admin token and redirect if invalid/expired
+        if (!validateAdminToken(navigate)) {
             return;
         }
 
-        setAdminData(JSON.parse(admin));
+        // Get token info and log status
+        const tokenInfo = getAdminTokenInfo();
+        if (tokenInfo) {
+            console.log('✅ Admin dashboard loaded with valid token');
+            console.log('Token expires in:', tokenInfo.hoursLeft, 'hours', tokenInfo.minutesLeft, 'minutes');
+            setAdminData(tokenInfo.admin);
+
+            // Set up token expiry warning if less than 1 hour remaining
+            if (tokenInfo.timeLeft < 60 * 60 * 1000) { // Less than 1 hour
+                console.warn('⚠️ Token expires soon! Consider logging out and back in for a fresh token.');
+            }
+        }
+
         fetchTeachers();
         fetchClerks();
+
+        // Set up periodic token validation (every 5 minutes)
+        const tokenCheckInterval = setInterval(() => {
+            if (!validateAdminToken(navigate)) {
+                clearInterval(tokenCheckInterval);
+            }
+        }, 5 * 60 * 1000); // Check every 5 minutes
+
+        return () => clearInterval(tokenCheckInterval);
     }, [navigate]);
 
-    const fetchTeachers = async () => {
+    const fetchTeachers = useCallback(async () => {
         setLoading(true);
         try {
             const token = localStorage.getItem('adminToken');
@@ -113,7 +131,7 @@ const AdminDashboard = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
     const fetchClerks = async () => {
         setLoading(true);
@@ -135,35 +153,130 @@ const AdminDashboard = () => {
     };
 
     const handleLogout = () => {
+        console.log('🚪 Admin logging out...');
+        // Clear all admin token data
         localStorage.removeItem('adminToken');
         localStorage.removeItem('adminData');
+        localStorage.removeItem('tokenTimestamp');
         navigate('/admin/login');
     };
 
-    const handleTeacherSubmit = async (e) => {
+    const handleTeacherSubmit = useCallback(async (e) => {
         e.preventDefault();
         setLoading(true);
         setError('');
 
         try {
             const token = localStorage.getItem('adminToken');
+            console.log('Admin token from localStorage:', token ? 'Token exists' : 'No token found');
+            console.log('Token preview:', token ? token.substring(0, 50) + '...' : 'null');
+            
             const config = {
                 headers: { Authorization: `Bearer ${token}` }
             };
+
+            // Transform flat teacherForm to structured format expected by backend
+            const transformedData = {
+                teacherId: teacherForm.teacherId, // Backend expects teacherId, not employeeId
+                personalInfo: {
+                    fullName: teacherForm.name,
+                    firstName: teacherForm.name.split(' ')[0] || '',
+                    lastName: teacherForm.name.split(' ').slice(1).join(' ') || teacherForm.name.split(' ')[0] || 'N/A', // Use first name as last name if no space
+                    email: teacherForm.email,
+                    phone: teacherForm.phone,
+                    dateOfBirth: teacherForm.dateOfBirth,
+                    gender: teacherForm.gender,
+                    address: {
+                        street: teacherForm.address,
+                        city: '',
+                        state: '',
+                        pincode: ''
+                    }
+                },
+                professionalInfo: {
+                    employeeId: teacherForm.teacherId, // Also set employeeId for consistency with model
+                    designation: teacherForm.designation,
+                    department: teacherForm.department,
+                    specialization: teacherForm.specialization || 'Computer Science', // Provide default
+                    qualification: teacherForm.qualification || 'B.Tech', // Provide default
+                    experience: parseInt(teacherForm.experience) || 0,
+                    joiningDate: teacherForm.joiningDate,
+                    employmentType: teacherForm.employeeType || 'Permanent', // Backend expects employmentType, provide default
+                    salary: {
+                        basic: parseInt(teacherForm.salary) || 25000,
+                        allowances: 0,
+                        total: parseInt(teacherForm.salary) || 25000
+                    }
+                },
+                academicInfo: {
+                    subjects: teacherForm.subjects ? teacherForm.subjects.split(',').map(s => ({
+                        name: s.trim(),
+                        code: '',
+                        semester: 0,
+                        branch: '',
+                        credits: 0
+                    })) : [],
+                    researchAreas: teacherForm.researchInterests ? teacherForm.researchInterests.split(',').map(s => s.trim()) : [],
+                    publications: teacherForm.publications ? teacherForm.publications.split(',').map(pub => ({
+                        title: pub.trim(),
+                        journal: '',
+                        year: new Date().getFullYear(),
+                        coAuthors: [],
+                        doi: ''
+                    })) : []
+                },
+                password: teacherForm.password
+            };
+
+            // Debug: Log the form data and transformed data
+            console.log('📝 Original teacherForm:', teacherForm);
+            console.log('🔄 Transformed data:', transformedData);
+            
+            // Detailed debugging of specific fields
+            console.log('🔍 Field-by-field check:');
+            console.log('  teacherId:', teacherForm.teacherId, '→', transformedData.teacherId);
+            console.log('  name:', teacherForm.name, '→', transformedData.personalInfo?.fullName);
+            console.log('  email:', teacherForm.email, '→', transformedData.personalInfo?.email);
+            console.log('  employeeType:', teacherForm.employeeType, '→', transformedData.professionalInfo?.employmentType);
+            console.log('  password:', teacherForm.password ? '[PROVIDED]' : '[MISSING]', '→', transformedData.password ? '[PROVIDED]' : '[MISSING]');
+            
+            // Validate required fields before sending
+            const requiredFields = ['teacherId', 'personalInfo.fullName', 'personalInfo.email', 'password'];
+            const missingFields = [];
+            
+            // Helper function to check if a value is truly missing (null, undefined, or empty string)
+            const isMissing = (value) => !value || value.toString().trim() === '';
+            
+            if (isMissing(transformedData.teacherId)) missingFields.push('teacherId');
+            if (isMissing(transformedData.personalInfo?.fullName)) missingFields.push('personalInfo.fullName (name)');
+            if (isMissing(transformedData.personalInfo?.lastName)) missingFields.push('personalInfo.lastName (derived from name)');
+            if (isMissing(transformedData.personalInfo?.email)) missingFields.push('personalInfo.email (email)');
+            if (isMissing(transformedData.professionalInfo?.qualification)) missingFields.push('professionalInfo.qualification');
+            if (isMissing(transformedData.professionalInfo?.specialization)) missingFields.push('professionalInfo.specialization');
+            if (isMissing(transformedData.professionalInfo?.employmentType)) missingFields.push('professionalInfo.employmentType');
+            if (isMissing(transformedData.password)) missingFields.push('password');
+            
+            if (missingFields.length > 0) {
+                console.error('❌ Missing required fields:', missingFields);
+                setError(`Missing required fields: ${missingFields.join(', ')}`);
+                return;
+            }
+            
+            console.log('✅ All required fields present, sending request...');
 
             let response;
             if (editingTeacher) {
                 // Update teacher
                 response = await axios.put(
                     `${import.meta.env.VITE_BACKEND_URL}/api/admin/teachers/${editingTeacher._id}`,
-                    teacherForm,
+                    transformedData,
                     config
                 );
             } else {
                 // Create new teacher
                 response = await axios.post(
                     `${import.meta.env.VITE_BACKEND_URL}/api/admin/teachers`,
-                    teacherForm,
+                    transformedData,
                     config
                 );
             }
@@ -196,11 +309,58 @@ const AdminDashboard = () => {
             }
         } catch (error) {
             console.error('Error saving teacher:', error);
+            console.error('Server response:', error.response?.data);
+            console.error('Status:', error.response?.status);
+            console.error('Headers sent:', error.config?.headers);
+            
+            // Check if it's a token expiry or invalid token error
+            if (error.response?.status === 401) {
+                const errorMessage = error.response?.data?.message || '';
+                if (errorMessage.includes('expired') || errorMessage.includes('Invalid token')) {
+                    // Token is expired or invalid, redirect to login
+                    console.log('Token expired or invalid, redirecting to login...');
+                    localStorage.removeItem('adminToken');
+                    localStorage.removeItem('adminData');
+                    navigate('/admin/login');
+                    return;
+                }
+            }
+            
             setError(error.response?.data?.message || 'Failed to save teacher');
         } finally {
             setLoading(false);
         }
-    };
+    }, [editingTeacher, fetchTeachers]);
+
+    const handleTeacherFormChange = useCallback((updater) => {
+        setTeacherForm(updater);
+    }, []);
+
+    const handleTeacherCancel = useCallback(() => {
+        setShowAddTeacher(false);
+        setEditingTeacher(null);
+        setTeacherForm({
+            teacherId: '',
+            name: '',
+            email: '',
+            phone: '',
+            dateOfBirth: '',
+            gender: '',
+            address: '',
+            designation: '',
+            department: '',
+            joiningDate: '',
+            employeeType: '',
+            experience: '',
+            salary: '',
+            subjects: '',
+            qualification: '',
+            specialization: '',
+            researchInterests: '',
+            publications: '',
+            password: ''
+        });
+    }, []);
 
     const handleClerkSubmit = async (clerkData, profilePhoto) => {
         setLoading(true);
@@ -715,6 +875,19 @@ const AdminDashboard = () => {
                                 <p className="text-xs text-gray-500">
                                     {adminData?.role} Administrator
                                 </p>
+                                {(() => {
+                                    const tokenInfo = getAdminTokenInfo();
+                                    if (tokenInfo) {
+                                        const isExpiringSoon = tokenInfo.timeLeft < 60 * 60 * 1000; // Less than 1 hour
+                                        return (
+                                            <p className={`text-xs ${isExpiringSoon ? 'text-orange-600' : 'text-green-600'}`}>
+                                                <i className={`ri-time-line ${isExpiringSoon ? 'text-orange-500' : 'text-green-500'}`}></i>
+                                                {' '}Token: {tokenInfo.hoursLeft}h {tokenInfo.minutesLeft}m left
+                                            </p>
+                                        );
+                                    }
+                                    return null;
+                                })()}
                             </div>
                             <button
                                 onClick={handleLogout}
@@ -812,31 +985,7 @@ const AdminDashboard = () => {
                         teacherForm={teacherForm}
                         setTeacherForm={setTeacherForm}
                         onSubmit={handleTeacherSubmit}
-                        onCancel={() => {
-                            setShowAddTeacher(false);
-                            setEditingTeacher(null);
-                            setTeacherForm({
-                                teacherId: '',
-                                name: '',
-                                email: '',
-                                phone: '',
-                                dateOfBirth: '',
-                                gender: '',
-                                address: '',
-                                designation: '',
-                                department: '',
-                                joiningDate: '',
-                                employeeType: '',
-                                experience: '',
-                                salary: '',
-                                subjects: '',
-                                qualification: '',
-                                specialization: '',
-                                researchInterests: '',
-                                publications: '',
-                                password: ''
-                            });
-                        }}
+                        onCancel={handleTeacherCancel}
                         loading={loading}
                         editingTeacher={editingTeacher}
                         error={error}
