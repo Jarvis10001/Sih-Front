@@ -7,6 +7,7 @@ import TopNav from './TopNav';
 import DashboardHome from './pages/DashboardHome';
 import AdmissionForm from './pages/AdmissionFormNew';
 import PaymentPage from './pages/PaymentPage';
+import StudentAttendance from './student/StudentAttendance';
 import axios from 'axios';
 
 
@@ -61,17 +62,17 @@ const DashboardContent = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#4CAF50] mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading dashboard...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1E293B] mx-auto mb-4"></div>
+          <p className="text-slate-600">Loading dashboard...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       <Sidebar />
       <div className={`flex-1 transition-all duration-300 ${
         isOpen ? 'md:ml-72' : 'md:ml-20'
@@ -86,7 +87,7 @@ const DashboardContent = () => {
             <Route path="/faculty" element={<FacultyPage />} />
             <Route path="/courses" element={<CoursesPage />} />
             <Route path="/assignments" element={<AssignmentsPage />} />
-            <Route path="/attendance" element={<AttendancePage />} />
+            <Route path="/attendance" element={<StudentAttendance />} />
             <Route path="/grades" element={<GradesPage />} />
             <Route path="/library" element={<LibraryPage />} />
             <Route path="/events" element={<EventsPage />} />
@@ -135,13 +136,6 @@ const AssignmentsPage = () => (
   <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
     <h1 className="text-2xl font-bold text-gray-800 mb-4">Assignments</h1>
     <p className="text-gray-600">Assignment management functionality will be implemented here.</p>
-  </div>
-);
-
-const AttendancePage = () => (
-  <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-    <h1 className="text-2xl font-bold text-gray-800 mb-4">Attendance Tracking</h1>
-    <p className="text-gray-600">Attendance tracking functionality will be implemented here.</p>
   </div>
 );
 

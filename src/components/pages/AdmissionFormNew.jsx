@@ -8,19 +8,19 @@ const AdmissionForm = () => {
     const inputClasses = `
         w-full p-3 rounded-xl 
         bg-[#F8F9F4] border-2 border-transparent
-        focus:border-[#4CAF50]
-        focus:ring-4 focus:ring-[#4CAF50]/10 
+        focus:border-[#3B82F6]
+        focus:ring-4 focus:ring-[#3B82F6]/10 
         focus:bg-white
-        hover:border-[#4CAF50]/30
+        hover:border-[#3B82F6]/30
         transition-all duration-300 ease-in-out
         text-[#333333] placeholder-[#6C757D]/60
-        focus:placeholder-[#4CAF50]/50
-        focus:shadow-lg focus:shadow-[#4CAF50]/5
+        focus:placeholder-[#3B82F6]/50
+        focus:shadow-lg focus:shadow-[#3B82F6]/5
         outline-none
     `;
 
     const selectClasses = inputClasses + ` appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,${encodeURIComponent(
-        `<svg width="20" height="20" fill="none" stroke="%234CAF50" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>`
+        `<svg width="20" height="20" fill="none" stroke="%233B82F6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>`
     )}')] bg-[length:20px_20px] bg-no-repeat bg-[center_right_1rem] pr-12`;
 
     const [documents, setDocuments] = useState({
@@ -153,19 +153,19 @@ const AdmissionForm = () => {
     const handleDragOver = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        e.currentTarget.classList.add('border-[#4CAF50]', 'bg-[#4CAF50]/5');
+        e.currentTarget.classList.add('border-[#3B82F6]', 'bg-[#3B82F6]/5');
     };
 
     const handleDragLeave = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        e.currentTarget.classList.remove('border-[#4CAF50]', 'bg-[#4CAF50]/5');
+        e.currentTarget.classList.remove('border-[#3B82F6]', 'bg-[#3B82F6]/5');
     };
 
     const handleDrop = (e, fieldName) => {
         e.preventDefault();
         e.stopPropagation();
-        e.currentTarget.classList.remove('border-[#4CAF50]', 'bg-[#4CAF50]/5');
+        e.currentTarget.classList.remove('border-[#3B82F6]', 'bg-[#3B82F6]/5');
         
         const file = e.dataTransfer.files[0];
         if (file) {
@@ -435,7 +435,7 @@ const AdmissionForm = () => {
     if (isLoading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#4CAF50]"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#3B82F6]"></div>
             </div>
         );
     }
@@ -450,7 +450,7 @@ const AdmissionForm = () => {
                         className="bg-white rounded-xl shadow-lg overflow-hidden"
                     >
                         {/* Header */}
-                        <div className="bg-gradient-to-r from-[#4CAF50] to-[#45a049] px-8 py-6">
+                        <div className="bg-gradient-to-r from-[#3B82F6] to-[#06B6D4] px-8 py-6">
                             <h1 className="text-3xl font-bold text-white">Admission Status</h1>
                             <p className="text-green-100 mt-2">Your admission form has been processed</p>
                         </div>
@@ -485,7 +485,7 @@ const AdmissionForm = () => {
                                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                     <button
                                         onClick={() => navigate('/dashboard/payment')}
-                                        className="px-6 py-3 bg-[#4CAF50] text-white rounded-lg hover:bg-[#45a049] transition-colors font-medium"
+                                        className="px-6 py-3 bg-[#3B82F6] text-white rounded-lg hover:bg-[#2563EB] transition-colors font-medium"
                                     >
                                         <i className="ri-bank-card-line mr-2"></i>
                                         Proceed to Payment
@@ -503,7 +503,7 @@ const AdmissionForm = () => {
                                 <div className="mt-8 pt-6 border-t border-gray-200">
                                     <p className="text-sm text-gray-600">
                                         Need help? Contact our admissions office at 
-                                        <a href="mailto:admissions@college.edu" className="text-[#4CAF50] hover:text-[#45a049] ml-1">
+                                        <a href="mailto:admissions@college.edu" className="text-[#3B82F6] hover:text-[#2563EB] ml-1">
                                             admissions@college.edu
                                         </a>
                                     </p>
@@ -519,10 +519,10 @@ const AdmissionForm = () => {
     return (
         <div className="max-w-7xl mx-auto my-10 px-4">
             {/* Notification banner */}
-            <div className="mb-6 bg-[#4CAF50]/10 border border-[#4CAF50]/20 rounded-xl p-4 shadow-sm">
+            <div className="mb-6 bg-[#3B82F6]/10 border border-[#3B82F6]/20 rounded-xl p-4 shadow-sm">
                 <div className="flex items-center gap-3">
                     <div className="flex-shrink-0">
-                        <i className="ri-information-line text-xl text-[#4CAF50]"></i>
+                        <i className="ri-information-line text-xl text-[#3B82F6]"></i>
                     </div>
                     <div>
                         <h4 className="text-[#333333] font-medium">College Admission Form</h4>
@@ -535,7 +535,7 @@ const AdmissionForm = () => {
 
             <div className="bg-white/70 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
                 {/* Header */}
-                <div className="relative h-32 bg-gradient-to-r from-[#4CAF50]/20 to-[#45a049]/20">
+                <div className="relative h-32 bg-gradient-to-r from-[#3B82F6]/20 to-[#06B6D4]/20">
                     <div className="absolute inset-0 px-8 py-6">
                         <div className="flex justify-between items-center">
                             <div>
@@ -547,7 +547,7 @@ const AdmissionForm = () => {
                                 </p>
                             </div>
                             <div className="h-12 w-12 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center">
-                                <i className="ri-graduation-cap-line text-2xl text-[#4CAF50]"></i>
+                                <i className="ri-graduation-cap-line text-2xl text-white"></i>
                             </div>
                         </div>
                     </div>
@@ -726,7 +726,7 @@ const AdmissionForm = () => {
                                                 <input
                                                     type="checkbox"
                                                     name="is-other-state"
-                                                    className="rounded border-gray-300 text-[#4CAF50] focus:ring-[#4CAF50]"
+                                                    className="rounded border-gray-300 text-[#3B82F6] focus:ring-[#3B82F6]"
                                                 />
                                                 <span className="text-sm text-gray-700">Student from other state</span>
                                             </label>
@@ -998,7 +998,7 @@ const AdmissionForm = () => {
                                     whileTap={{ scale: 0.99 }}
                                     type="submit"
                                     disabled={isUploading}
-                                    className={`w-full p-4 bg-gradient-to-r from-[#4CAF50] to-[#45a049] text-white rounded-xl font-semibold shadow-lg hover:shadow-xl hover:shadow-[#4CAF50]/20 transition-all duration-300 ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    className={`w-full p-4 bg-gradient-to-r from-[#3B82F6] to-[#06B6D4] text-white rounded-xl font-semibold shadow-lg hover:shadow-xl hover:shadow-[#3B82F6]/20 transition-all duration-300 ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}
                                 >
                                     <span className="flex items-center justify-center gap-2">
                                         {isUploading ? (
@@ -1016,7 +1016,7 @@ const AdmissionForm = () => {
                                 </motion.button>
                                 <p className="text-center mt-4 text-sm text-[#6C757D]">
                                     By submitting this form, you agree to our{' '}
-                                    <a href="#" className="text-[#4CAF50] hover:text-[#45a049] underline">
+                                    <a href="#" className="text-[#3B82F6] hover:text-[#2563EB] underline">
                                         Terms and Conditions
                                     </a>
                                 </p>
@@ -1037,8 +1037,8 @@ const FormSection = ({ icon, title, content }) => (
         className="bg-white/50 rounded-xl p-6 backdrop-blur-sm border border-gray-100 shadow-sm"
     >
         <div className="flex items-center gap-4 mb-6">
-            <div className="h-10 w-10 rounded-xl bg-[#4CAF50]/10 flex items-center justify-center">
-                <i className={`${icon} text-xl text-[#4CAF50]`}></i>
+            <div className="h-10 w-10 rounded-xl bg-[#3B82F6]/10 flex items-center justify-center">
+                <i className={`${icon} text-xl text-[#3B82F6]`}></i>
             </div>
             <h3 className="text-xl font-bold text-[#333333]">{title}</h3>
         </div>
@@ -1097,7 +1097,7 @@ const DocumentUpload = ({
                 <div className="flex items-center justify-center w-full">
                     <label 
                         className={`flex flex-col w-full h-32 border-2 border-dashed rounded-lg cursor-pointer 
-                            ${file ? 'border-[#4CAF50] bg-[#4CAF50]/5' : 'border-gray-300 bg-[#F8F9F4]'} 
+                            ${file ? 'border-[#3B82F6] bg-[#3B82F6]/5' : 'border-gray-300 bg-[#F8F9F4]'} 
                             hover:bg-[#F1F3F1] transition-colors duration-300`}
                         onDragOver={onDragOver}
                         onDragLeave={onDragLeave}
@@ -1106,7 +1106,7 @@ const DocumentUpload = ({
                         <div className="flex flex-col items-center justify-center pt-5 pb-6">
                             {!file ? (
                                 <>
-                                    <svg className="w-8 h-8 mb-4 text-[#4CAF50]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg className="w-8 h-8 mb-4 text-[#3B82F6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                                     </svg>
                                     <p className="mb-2 text-sm text-[#6C757D]">

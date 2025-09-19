@@ -52,18 +52,18 @@ const TeacherTopNav = () => {
         <div className="flex items-center gap-4">
           {/* Sidebar Toggle */}
           <button
-            className="hidden md:flex p-2 rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors duration-300"
+            className="hidden md:flex p-2 rounded-xl hover:bg-[#3B82F6]/10 text-[#3B82F6] transition-all duration-300"
             onClick={() => setIsOpen(!isOpen)}
           >
-            <i className={`ri-${isOpen ? 'close' : 'menu'}-line text-xl text-gray-600`} />
+            <i className={`ri-${isOpen ? 'menu-fold' : 'menu-unfold'}-line text-xl`} />
           </button>
 
           {/* Greeting */}
           <div className="hidden sm:block">
-            <h2 className="text-xl font-semibold text-gray-800">
+            <h2 className="text-xl font-bold text-[#3B82F6]">
               {getGreeting()}, {teacherData?.name?.split(' ')[0] || 'Teacher'}!
             </h2>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-[#06B6D4]">
               {teacherData?.department || 'Department'} • {new Date().toLocaleDateString('en-US', { 
                 weekday: 'long', 
                 year: 'numeric', 
@@ -78,13 +78,13 @@ const TeacherTopNav = () => {
         <div className="flex items-center gap-3">
           {/* Quick Actions */}
           <div className="hidden lg:flex items-center gap-2">
-            <button className="p-2 rounded-xl bg-[#4CAF50]/10 hover:bg-[#4CAF50]/20 text-[#4CAF50] transition-colors duration-300" title="Mark Attendance">
+            <button className="p-2 rounded-xl bg-[#3B82F6]/10 hover:bg-[#3B82F6]/20 text-[#3B82F6] transition-colors duration-300" title="Mark Attendance">
               <i className="ri-calendar-check-line text-lg" />
             </button>
-            <button className="p-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-600 transition-colors duration-300" title="Create Assignment">
+            <button className="p-2 rounded-xl bg-[#06B6D4]/10 hover:bg-[#06B6D4]/20 text-[#06B6D4] transition-colors duration-300" title="Create Assignment">
               <i className="ri-file-add-line text-lg" />
             </button>
-            <button className="p-2 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-600 transition-colors duration-300" title="Grade Submissions">
+            <button className="p-2 rounded-xl bg-[#3B82F6]/10 hover:bg-[#3B82F6]/20 text-[#3B82F6] transition-colors duration-300" title="Grade Submissions">
               <i className="ri-bar-chart-line text-lg" />
             </button>
           </div>
@@ -92,13 +92,13 @@ const TeacherTopNav = () => {
           {/* Notifications */}
           <div className="relative">
             <button
-              className="p-2 rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors duration-300 relative"
+              className="relative p-2 rounded-xl hover:bg-[#3B82F6]/10 text-[#3B82F6] transition-all duration-300"
               onClick={() => setShowNotifications(!showNotifications)}
             >
-              <i className="ri-notification-line text-xl text-gray-600" />
+              <i className="ri-notification-3-line text-xl" />
               {notifications.length > 0 && (
                 <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                  {notifications.length}
+                  {notifications.length > 9 ? '9+' : notifications.length}
                 </span>
               )}
             </button>
@@ -112,7 +112,7 @@ const TeacherTopNav = () => {
                 className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-gray-200 z-50"
               >
                 <div className="p-4 border-b border-gray-100">
-                  <h3 className="font-semibold text-gray-800">Notifications</h3>
+                  <h3 className="font-semibold text-[#333333]">Notifications</h3>
                 </div>
                 <div className="max-h-64 overflow-y-auto">
                   {notifications.map((notification) => (
@@ -122,8 +122,8 @@ const TeacherTopNav = () => {
                           <i className={`${notification.icon} text-${notification.color}-600`} />
                         </div>
                         <div className="flex-1">
-                          <h4 className="font-medium text-gray-800 text-sm">{notification.title}</h4>
-                          <p className="text-gray-600 text-xs mt-1">{notification.message}</p>
+                          <h4 className="font-medium text-[#333333] text-sm">{notification.title}</h4>
+                          <p className="text-[#6C757D] text-xs mt-1">{notification.message}</p>
                           <p className="text-gray-400 text-xs mt-1">{notification.time}</p>
                         </div>
                       </div>
@@ -131,7 +131,7 @@ const TeacherTopNav = () => {
                   ))}
                 </div>
                 <div className="p-4 border-t border-gray-100">
-                  <button className="text-[#4CAF50] text-sm font-medium hover:text-[#45a049] transition-colors">
+                  <button className="text-[#3B82F6] text-sm font-medium hover:text-[#2563EB] transition-colors">
                     View All Notifications
                   </button>
                 </div>
@@ -140,17 +140,17 @@ const TeacherTopNav = () => {
           </div>
 
           {/* Teacher Profile */}
-          <div className="flex items-center gap-3 p-2 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors duration-300">
-            <div className="w-8 h-8 rounded-full bg-[#4CAF50] flex items-center justify-center">
-              <span className="text-white text-sm font-semibold">
+          <div className="flex items-center gap-3 p-2 rounded-xl hover:bg-[#3B82F6]/10 transition-colors duration-300">
+            <div className="w-8 h-8 rounded-full bg-[#3B82F6]/10 flex items-center justify-center text-[#3B82F6] font-semibold">
+              <span className="text-sm">
                 {teacherData?.name?.charAt(0)?.toUpperCase() || 'T'}
               </span>
             </div>
             <div className="hidden sm:block">
-              <p className="text-sm font-medium text-gray-800">
+              <p className="text-sm font-semibold text-[#3B82F6]">
                 {teacherData?.name || 'Teacher'}
               </p>
-              <p className="text-xs text-gray-600">
+              <p className="text-xs text-[#06B6D4]">
                 {teacherData?.teacherId || 'ID: N/A'}
               </p>
             </div>

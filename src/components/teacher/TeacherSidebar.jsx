@@ -31,7 +31,7 @@ const TeacherSidebar = () => {
     <>
       {/* Mobile menu button */}
       <button
-        className="fixed top-4 left-4 z-40 p-2 rounded-xl bg-[#4CAF50] text-white shadow-lg md:hidden hover:bg-[#45a049] transition-colors duration-300"
+        className="fixed top-4 left-4 z-40 p-2 rounded-xl bg-gradient-to-br from-[#1E3A8A] to-[#0C4A6E] text-white shadow-lg md:hidden hover:shadow-xl transition-all duration-300"
         onClick={() => setIsOpen(true)}
       >
         <i className="ri-menu-line text-xl" />
@@ -47,11 +47,11 @@ const TeacherSidebar = () => {
 
       {/* Sidebar */}
       <aside className={`fixed top-0 left-0 z-50 h-full flex flex-col transition-all duration-300 ease-in-out
-        bg-gradient-to-b from-[#4CAF50] to-[#45a049] border-r border-white/10
+        bg-gradient-to-b from-[#1E3A8A] to-[#0C4A6E] border-r border-white/10
         ${isOpen ? 'w-72' : 'w-20'}`}
       >
         {/* Header */}
-        <div className="flex-shrink-0 p-5 border-b border-white/10 bg-[#45a049]/50 overflow-hidden">
+        <div className="flex-shrink-0 p-5 border-b border-white/10 bg-[#0C4A6E]/50 overflow-hidden">
           <Link to="/teacher/dashboard" className="flex items-center gap-2">
             <div className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-colors duration-300">
               <i className="ri-user-star-line text-xl text-white" />
@@ -59,7 +59,7 @@ const TeacherSidebar = () => {
             <span className={`text-xl font-bold text-white transition-opacity duration-300 ${
               isOpen ? 'opacity-100' : 'opacity-0'
             }`}>
-              Teacher<span className="text-green-100">Portal</span>
+              Teacher<span className="text-blue-200">Portal</span>
             </span>
           </Link>
           
@@ -82,10 +82,10 @@ const TeacherSidebar = () => {
               <p className="text-white font-medium text-sm truncate">
                 {teacherData?.name || 'Teacher'}
               </p>
-              <p className="text-green-100 text-xs truncate">
+              <p className="text-blue-100 text-xs truncate">
                 {teacherData?.designation || 'Faculty'} • {teacherData?.department || 'Department'}
               </p>
-              <p className="text-green-100 text-xs truncate">
+              <p className="text-blue-100 text-xs truncate">
                 ID: {teacherData?.teacherId || 'N/A'}
               </p>
             </div>
@@ -99,40 +99,38 @@ const TeacherSidebar = () => {
               <Link
                 key={item.name}
                 to={item.path}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
-                  transition-all duration-300 group hover:bg-white/10 ${
-                  location.pathname === item.path
-                    ? 'bg-white/20 text-white shadow-lg'
-                    : 'text-green-100 hover:text-white'
-                }`}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group
+                  ${location.pathname === item.path
+                    ? 'bg-gradient-to-r from-white/20 to-cyan-300/20 text-white shadow-lg' 
+                    : 'text-white/70 hover:bg-gradient-to-r hover:from-white/10 hover:to-cyan-300/10 hover:text-white'
+                  }`}
               >
-                <i className={`${item.icon} text-lg flex-shrink-0 transition-transform duration-300 
-                  group-hover:scale-110 ${location.pathname === item.path ? 'scale-110' : ''}`} />
-                <span className={`transition-opacity duration-300 ${
-                  isOpen ? 'opacity-100' : 'opacity-0'
+                <i className={`${item.icon} text-lg ${
+                  location.pathname === item.path
+                    ? 'text-white'
+                    : 'text-white/70 group-hover:text-white'
+                }`} />
+                <span className={`text-sm font-medium whitespace-nowrap transition-all duration-300 ${
+                  isOpen ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
                 }`}>
                   {item.name}
                 </span>
-                {location.pathname === item.path && (
-                  <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                )}
               </Link>
             ))}
           </div>
         </nav>
 
         {/* Footer Actions */}
-        <div className="p-4 border-t border-white/10 bg-[#45a049]/30">
+        <div className="p-4 border-t border-white/10">
           <div className="space-y-2">
             {/* Profile Link */}
             <Link
               to="/teacher/dashboard/profile"
-              className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium
-                transition-all duration-300 group hover:bg-white/10 text-green-100 hover:text-white`}
+              className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-white/70 hover:bg-gradient-to-r hover:from-white/10 hover:to-cyan-300/10 hover:text-white transition-all duration-300"
             >
-              <i className="ri-user-settings-line text-lg flex-shrink-0" />
-              <span className={`transition-opacity duration-300 ${
-                isOpen ? 'opacity-100' : 'opacity-0'
+              <i className="ri-user-settings-line text-lg" />
+              <span className={`text-sm font-medium whitespace-nowrap transition-all duration-300 ${
+                isOpen ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
               }`}>
                 Profile
               </span>
@@ -141,12 +139,11 @@ const TeacherSidebar = () => {
             {/* Logout Button */}
             <button
               onClick={handleLogout}
-              className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium
-                transition-all duration-300 group hover:bg-red-500/20 text-green-100 hover:text-red-200`}
+              className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-white/70 hover:bg-gradient-to-r hover:from-white/10 hover:to-cyan-300/10 hover:text-white transition-all duration-300"
             >
-              <i className="ri-logout-box-line text-lg flex-shrink-0" />
-              <span className={`transition-opacity duration-300 ${
-                isOpen ? 'opacity-100' : 'opacity-0'
+              <i className="ri-logout-box-line text-lg" />
+              <span className={`text-sm font-medium whitespace-nowrap transition-all duration-300 ${
+                isOpen ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
               }`}>
                 Logout
               </span>

@@ -130,13 +130,13 @@ const TopNav = () => {
 
     return (
         <div className="sticky top-0 left-0 z-30">
-            <div className="bg-white/80 backdrop-blur-md shadow-sm px-6 py-3 border-b border-gray-200/20">
+            <div className="bg-white backdrop-blur-md shadow-sm px-6 py-3 border-b border-gray-200">
                 <div className="flex items-center justify-between">
                     {/* Left Section */}
                     <div className="flex items-center gap-4">
                         <button 
                             onClick={toggleSidebar}
-                            className="p-2 rounded-xl hover:bg-[#4CAF50]/10 text-[#4CAF50] transition-all duration-300"
+                            className="p-2 rounded-xl hover:bg-[#3B82F6]/10 text-[#3B82F6] transition-all duration-300"
                         >
                             <motion.i 
                                 animate={{ rotate: isOpen ? 180 : 0 }}
@@ -148,11 +148,11 @@ const TopNav = () => {
                             <motion.h1 
                                 initial={{ y: -20, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}
-                                className="text-xl font-bold text-[#4CAF50]"
+                                className="text-xl font-bold text-[#3B82F6]"
                             >
                                 {getPageTitle()}
                             </motion.h1>
-                            <p className="text-sm text-[#45a049] hidden md:block">
+                            <p className="text-sm text-[#06B6D4] hidden md:block">
                                 {new Date().toLocaleDateString('en-US', { 
                                     weekday: 'long', 
                                     year: 'numeric', 
@@ -168,7 +168,7 @@ const TopNav = () => {
                         {/* Notifications */}
                         <div className="relative">
                             <button 
-                                className="relative p-2 rounded-xl hover:bg-[#4CAF50]/10 text-[#4CAF50] transition-all duration-300"
+                                className="relative p-2 rounded-xl hover:bg-[#3B82F6]/10 text-[#3B82F6] transition-all duration-300"
                                 onClick={() => setShowNotifications(!showNotifications)}
                             >
                                 <i className="ri-notification-3-line text-xl" />
@@ -200,7 +200,7 @@ const TopNav = () => {
                                                     }`}
                                                 >
                                                     <div className="flex items-start gap-3">
-                                                        <i className={`${getNotificationIcon(notification.type)} text-[#4CAF50] mt-1`} />
+                                                        <i className={`${getNotificationIcon(notification.type)} text-[#3B82F6] mt-1`} />
                                                         <div className="flex-1 min-w-0">
                                                             <p className="font-medium text-gray-800 text-sm">
                                                                 {notification.title}
@@ -232,21 +232,21 @@ const TopNav = () => {
                         {/* Profile Dropdown */}
                         <div className="relative">
                             <button 
-                                className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-[#4CAF50]/10 transition-all duration-300"
+                                className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-[#3B82F6]/10 transition-all duration-300"
                                 onClick={() => setShowProfileMenu(!showProfileMenu)}
                             >
-                                <div className="w-8 h-8 rounded-full bg-[#4CAF50] flex items-center justify-center text-white font-semibold">
+                                <div className="w-8 h-8 rounded-full bg-[#3B82F6]/10 flex items-center justify-center text-[#3B82F6] font-semibold">
                                     {userData?.name ? userData.name.charAt(0).toUpperCase() : 'U'}
                                 </div>
                                 <div className="hidden md:block text-left">
-                                    <p className="text-sm font-semibold text-[#4CAF50]">
+                                    <p className="text-sm font-semibold text-[#3B82F6]">
                                         {userData?.name || 'User'}
                                     </p>
-                                    <p className="text-xs text-[#45a049]">
+                                    <p className="text-xs text-[#06B6D4]">
                                         {userData?.role || 'Student'}
                                     </p>
                                 </div>
-                                <i className={`ri-arrow-down-s-line text-[#4CAF50] transition-transform duration-300 ${
+                                <i className={`ri-arrow-down-s-line text-[#3B82F6] transition-transform duration-300 ${
                                     showProfileMenu ? 'rotate-180' : ''
                                 }`} />
                             </button>

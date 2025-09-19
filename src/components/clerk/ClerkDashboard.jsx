@@ -3,10 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import StudentVerification from './StudentVerification';
+import DocumentVerification from './DocumentVerification';
+import ClerkSidebar from './ClerkSidebar';
+import ClerkTopNav from './ClerkTopNav';
 
 const ClerkDashboard = () => {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('overview');
+    const [sidebarOpen, setSidebarOpen] = useState(true);
     const [clerkData, setClerkData] = useState(null);
     const [dashboardStats, setDashboardStats] = useState({});
     const [loading, setLoading] = useState(false);
@@ -54,16 +58,16 @@ const ClerkDashboard = () => {
     const renderOverview = () => (
         <div className="space-y-6">
             {/* Welcome Section */}
-            <div className="bg-gradient-to-r from-[#4CAF50] to-[#45a049] rounded-2xl p-6 text-white">
+            <div className="bg-gradient-to-r from-[#3B82F6] to-[#2563EB] rounded-2xl p-6 text-white">
                 <div className="flex items-center justify-between">
                     <div>
                         <h2 className="text-2xl font-bold mb-2">
                             Welcome back, {clerkData?.personalInfo?.fullName}!
                         </h2>
-                        <p className="text-green-100">
+                        <p className="text-blue-100">
                             {clerkData?.professionalInfo?.designation} - {clerkData?.professionalInfo?.department}
                         </p>
-                        <p className="text-green-100 text-sm mt-1">
+                        <p className="text-blue-100 text-sm mt-1">
                             Access Level: {clerkData?.systemAccess?.accessLevel?.toUpperCase()}
                         </p>
                     </div>
@@ -85,8 +89,8 @@ const ClerkDashboard = () => {
                             <p className="text-sm font-medium text-gray-600">Accessible Modules</p>
                             <p className="text-3xl font-bold text-gray-900">{dashboardStats.modules || 0}</p>
                         </div>
-                        <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                            <i className="ri-apps-line text-blue-600 text-xl"></i>
+                        <div className="w-12 h-12 bg-[#3B82F6]/10 rounded-xl flex items-center justify-center">
+                            <i className="ri-apps-line text-[#3B82F6] text-xl"></i>
                         </div>
                     </div>
                 </motion.div>
@@ -102,8 +106,8 @@ const ClerkDashboard = () => {
                             <p className="text-sm font-medium text-gray-600">Department</p>
                             <p className="text-lg font-bold text-gray-900">{dashboardStats.department || 'N/A'}</p>
                         </div>
-                        <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                            <i className="ri-building-line text-green-600 text-xl"></i>
+                        <div className="w-12 h-12 bg-[#3B82F6]/10 rounded-xl flex items-center justify-center">
+                            <i className="ri-building-line text-[#3B82F6] text-xl"></i>
                         </div>
                     </div>
                 </motion.div>
@@ -119,8 +123,8 @@ const ClerkDashboard = () => {
                             <p className="text-sm font-medium text-gray-600">Work Shift</p>
                             <p className="text-lg font-bold text-gray-900">{dashboardStats.workShift || 'N/A'}</p>
                         </div>
-                        <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                            <i className="ri-time-line text-purple-600 text-xl"></i>
+                        <div className="w-12 h-12 bg-[#3B82F6]/10 rounded-xl flex items-center justify-center">
+                            <i className="ri-time-line text-[#3B82F6] text-xl"></i>
                         </div>
                     </div>
                 </motion.div>
@@ -138,8 +142,8 @@ const ClerkDashboard = () => {
                                 {dashboardStats.accessLevel || 'Read'}
                             </p>
                         </div>
-                        <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
-                            <i className="ri-shield-user-line text-orange-600 text-xl"></i>
+                        <div className="w-12 h-12 bg-[#3B82F6]/10 rounded-xl flex items-center justify-center">
+                            <i className="ri-shield-user-line text-[#3B82F6] text-xl"></i>
                         </div>
                     </div>
                 </motion.div>
@@ -154,10 +158,10 @@ const ClerkDashboard = () => {
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={() => setActiveTab('student-verification')}
-                            className="p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-200 hover:from-blue-100 hover:to-blue-200 transition-all duration-300"
+                            className="p-4 bg-gradient-to-r from-[#3B82F6]/10 to-[#06B6D4]/10 rounded-xl border border-[#3B82F6]/20 hover:from-[#3B82F6]/20 hover:to-[#06B6D4]/20 transition-all duration-300"
                         >
                             <div className="flex items-center space-x-3">
-                                <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                                <div className="w-10 h-10 bg-[#3B82F6] rounded-lg flex items-center justify-center">
                                     <i className="ri-user-add-line text-white"></i>
                                 </div>
                                 <div className="text-left">
@@ -172,10 +176,10 @@ const ClerkDashboard = () => {
                         <motion.button
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
-                            className="p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-xl border border-green-200 hover:from-green-100 hover:to-green-200 transition-all duration-300"
+                            className="p-4 bg-gradient-to-r from-[#06B6D4]/10 to-[#3B82F6]/10 rounded-xl border border-[#06B6D4]/20 hover:from-[#06B6D4]/20 hover:to-[#3B82F6]/20 transition-all duration-300"
                         >
                             <div className="flex items-center space-x-3">
-                                <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
+                                <div className="w-10 h-10 bg-[#06B6D4] rounded-lg flex items-center justify-center">
                                     <i className="ri-file-check-line text-white"></i>
                                 </div>
                                 <div className="text-left">
@@ -190,10 +194,10 @@ const ClerkDashboard = () => {
                         <motion.button
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
-                            className="p-4 bg-gradient-to-r from-orange-50 to-orange-100 rounded-xl border border-orange-200 hover:from-orange-100 hover:to-orange-200 transition-all duration-300"
+                            className="p-4 bg-gradient-to-r from-[#2563EB]/10 to-[#3B82F6]/10 rounded-xl border border-[#2563EB]/20 hover:from-[#2563EB]/20 hover:to-[#3B82F6]/20 transition-all duration-300"
                         >
                             <div className="flex items-center space-x-3">
-                                <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+                                <div className="w-10 h-10 bg-[#2563EB] rounded-lg flex items-center justify-center">
                                     <i className="ri-money-dollar-circle-line text-white"></i>
                                 </div>
                                 <div className="text-left">
@@ -208,158 +212,179 @@ const ClerkDashboard = () => {
         </div>
     );
 
-    return (
-        <div className="min-h-screen bg-gray-50">
-            {/* Header */}
-            <div className="bg-white shadow-sm border-b border-gray-200">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center justify-between h-16">
-                        <div className="flex items-center gap-4">
-                            <div className="w-10 h-10 bg-gradient-to-br from-[#4CAF50] to-[#45a049] rounded-xl flex items-center justify-center">
-                                <i className="ri-user-settings-line text-white text-lg"></i>
-                            </div>
-                            <div>
-                                <h1 className="text-xl font-semibold text-gray-900">Clerk Dashboard</h1>
-                                <p className="text-sm text-gray-600">College ERP - Clerk Portal</p>
-                            </div>
-                        </div>
+    const toggleSidebar = () => {
+        setSidebarOpen(!sidebarOpen);
+    };
 
-                        <div className="flex items-center gap-4">
-                            <div className="text-right">
-                                <p className="text-sm font-medium text-gray-900">
-                                    {clerkData?.personalInfo?.fullName}
-                                </p>
-                                <p className="text-xs text-gray-500">
-                                    {clerkData?.employeeId}
-                                </p>
-                            </div>
-                            <button
-                                onClick={handleLogout}
-                                className="bg-red-50 text-red-600 px-4 py-2 rounded-xl font-medium hover:bg-red-100 transition-colors flex items-center gap-2"
-                            >
-                                <i className="ri-logout-box-line"></i>
-                                Logout
-                            </button>
-                        </div>
+    const renderContent = () => {
+        switch (activeTab) {
+            case 'overview':
+                return renderOverview();
+            case 'student-verification':
+                return <StudentVerification />;
+            case 'document-verification':
+                return <DocumentVerification />;
+            case 'application-status':
+                return renderApplicationStatus();
+            case 'student-records':
+                return renderStudentRecords();
+            case 'certificates':
+                return renderCertificates();
+            case 'fee-collection':
+                return renderFeeCollection();
+            case 'exam-management':
+                return renderExamManagement();
+            case 'timetable':
+                return renderTimetable();
+            case 'attendance':
+                return renderAttendance();
+            case 'profile':
+                return renderProfile();
+            default:
+                return renderOverview();
+        }
+    };
+
+    // Placeholder render functions for new sections
+    const renderApplicationStatus = () => (
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 text-center">
+            <i className="ri-file-search-line text-4xl text-[#3B82F6] mb-4"></i>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Application Status</h3>
+            <p className="text-gray-600">Track and manage application statuses</p>
+        </div>
+    );
+
+    const renderStudentRecords = () => (
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 text-center">
+            <i className="ri-folder-user-line text-4xl text-[#3B82F6] mb-4"></i>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Student Records</h3>
+            <p className="text-gray-600">Manage student academic records</p>
+        </div>
+    );
+
+    const renderCertificates = () => (
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 text-center">
+            <i className="ri-award-line text-4xl text-[#3B82F6] mb-4"></i>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Certificates</h3>
+            <p className="text-gray-600">Issue and manage certificates</p>
+        </div>
+    );
+
+    const renderFeeCollection = () => (
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 text-center">
+            <i className="ri-money-dollar-circle-line text-4xl text-[#3B82F6] mb-4"></i>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Fee Collection</h3>
+            <p className="text-gray-600">Manage fee payments and collections</p>
+        </div>
+    );
+
+    const renderExamManagement = () => (
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 text-center">
+            <i className="ri-file-text-line text-4xl text-[#3B82F6] mb-4"></i>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Exam Management</h3>
+            <p className="text-gray-600">Manage exams and results</p>
+        </div>
+    );
+
+    const renderTimetable = () => (
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 text-center">
+            <i className="ri-calendar-line text-4xl text-[#3B82F6] mb-4"></i>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Timetable</h3>
+            <p className="text-gray-600">Manage class schedules and timetables</p>
+        </div>
+    );
+
+    const renderAttendance = () => (
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 text-center">
+            <i className="ri-user-check-line text-4xl text-[#3B82F6] mb-4"></i>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Attendance</h3>
+            <p className="text-gray-600">Track and manage student attendance</p>
+        </div>
+    );
+
+    const renderProfile = () => (
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+            <div className="flex items-center gap-4 mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-[#3B82F6] to-[#2563EB] rounded-xl flex items-center justify-center text-white font-bold text-2xl">
+                    {clerkData?.personalInfo?.fullName?.charAt(0).toUpperCase() || 'C'}
+                </div>
+                <div>
+                    <h3 className="text-xl font-semibold text-gray-900">
+                        {clerkData?.personalInfo?.fullName || 'Clerk Profile'}
+                    </h3>
+                    <p className="text-gray-600">Employee ID: {clerkData?.employeeId}</p>
+                </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h4 className="font-semibold text-gray-900 mb-3">Personal Information</h4>
+                    <div className="space-y-2">
+                        <p className="text-sm"><span className="font-medium">Email:</span> {clerkData?.personalInfo?.email}</p>
+                        <p className="text-sm"><span className="font-medium">Phone:</span> {clerkData?.personalInfo?.phone}</p>
+                        <p className="text-sm"><span className="font-medium">Department:</span> {clerkData?.professionalInfo?.department}</p>
+                    </div>
+                </div>
+                <div>
+                    <h4 className="font-semibold text-gray-900 mb-3">Professional Information</h4>
+                    <div className="space-y-2">
+                        <p className="text-sm"><span className="font-medium">Designation:</span> {clerkData?.professionalInfo?.designation}</p>
+                        <p className="text-sm"><span className="font-medium">Work Shift:</span> {clerkData?.professionalInfo?.workShift}</p>
+                        <p className="text-sm"><span className="font-medium">Access Level:</span> {clerkData?.systemAccess?.accessLevel}</p>
                     </div>
                 </div>
             </div>
+        </div>
+    );
 
-            {/* Navigation Tabs */}
-            <div className="bg-white border-b border-gray-200">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <nav className="flex space-x-8">
-                        {[
-                            { id: 'overview', label: 'Overview', icon: 'ri-dashboard-line' },
-                            ...(clerkData?.systemAccess?.modules?.includes('admission_processing') ? [
-                                { id: 'student-verification', label: 'Student Verification', icon: 'ri-user-add-line' }
-                            ] : []),
-                            { id: 'profile', label: 'Profile', icon: 'ri-user-line' },
-                        ].map((tab) => (
-                            <button
-                                key={tab.id}
-                                onClick={() => setActiveTab(tab.id)}
-                                className={`flex items-center gap-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                                    activeTab === tab.id
-                                        ? 'border-[#4CAF50] text-[#4CAF50]'
-                                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                                }`}
-                            >
-                                <i className={tab.icon}></i>
-                                {tab.label}
-                            </button>
-                        ))}
-                    </nav>
-                </div>
-            </div>
+    return (
+        <div className="h-screen bg-gray-50 flex overflow-hidden">
+            {/* Clerk Sidebar */}
+            <ClerkSidebar 
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+                isOpen={sidebarOpen}
+                setIsOpen={setSidebarOpen}
+                clerkData={clerkData}
+            />
 
-            {/* Main Content */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {error && (
-                    <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6"
-                    >
-                        <div className="flex items-center gap-2">
-                            <i className="ri-error-warning-line"></i>
-                            {error}
-                        </div>
-                    </motion.div>
-                )}
+            {/* Main Content Area */}
+            <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+                {/* Top Navigation */}
+                <ClerkTopNav 
+                    activeTab={activeTab}
+                    isOpen={sidebarOpen}
+                    toggleSidebar={toggleSidebar}
+                    clerkData={clerkData}
+                />
 
-                <AnimatePresence mode="wait">
-                    {activeTab === 'overview' && (
+                {/* Main Content */}
+                <main className="flex-1 p-6 overflow-y-auto">
+                    {error && (
                         <motion.div
-                            key="overview"
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6"
                         >
-                            {renderOverview()}
-                        </motion.div>
-                    )}
-
-                    {activeTab === 'student-verification' && (
-                        <motion.div
-                            key="student-verification"
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                        >
-                            <StudentVerification />
-                        </motion.div>
-                    )}
-
-                    {activeTab === 'profile' && (
-                        <motion.div
-                            key="profile"
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                        >
-                            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
-                                <h2 className="text-2xl font-bold text-gray-900 mb-6">My Profile</h2>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Personal Information</h3>
-                                        <div className="space-y-3">
-                                            <div>
-                                                <label className="text-sm font-medium text-gray-600">Full Name</label>
-                                                <p className="text-gray-900">{clerkData?.personalInfo?.fullName}</p>
-                                            </div>
-                                            <div>
-                                                <label className="text-sm font-medium text-gray-600">Email</label>
-                                                <p className="text-gray-900">{clerkData?.personalInfo?.email}</p>
-                                            </div>
-                                            <div>
-                                                <label className="text-sm font-medium text-gray-600">Phone</label>
-                                                <p className="text-gray-900">{clerkData?.personalInfo?.phone}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Professional Information</h3>
-                                        <div className="space-y-3">
-                                            <div>
-                                                <label className="text-sm font-medium text-gray-600">Employee ID</label>
-                                                <p className="text-gray-900">{clerkData?.employeeId}</p>
-                                            </div>
-                                            <div>
-                                                <label className="text-sm font-medium text-gray-600">Designation</label>
-                                                <p className="text-gray-900">{clerkData?.professionalInfo?.designation}</p>
-                                            </div>
-                                            <div>
-                                                <label className="text-sm font-medium text-gray-600">Department</label>
-                                                <p className="text-gray-900">{clerkData?.professionalInfo?.department}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div className="flex items-center gap-2">
+                                <i className="ri-error-warning-line"></i>
+                                {error}
                             </div>
                         </motion.div>
                     )}
-                </AnimatePresence>
+
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={activeTab}
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -20 }}
+                            transition={{ duration: 0.2 }}
+                        >
+                            {renderContent()}
+                        </motion.div>
+                    </AnimatePresence>
+                </main>
             </div>
         </div>
     );

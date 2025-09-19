@@ -17,7 +17,7 @@ const TeacherLogin = () => {
             ...formData,
             [e.target.name]: e.target.value
         });
-        setError(''); // Clear error when user types
+        setError('');
     };
 
     const handleSubmit = async (e) => {
@@ -29,149 +29,203 @@ const TeacherLogin = () => {
             const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/teacher/login`, formData);
 
             if (response.data.success) {
-                // Store teacher data in localStorage
                 localStorage.setItem('teacherToken', response.data.token);
                 localStorage.setItem('teacherData', JSON.stringify(response.data.teacher));
-
-                // Redirect to teacher dashboard
                 navigate('/teacher/dashboard');
             }
         } catch (error) {
             console.error('Teacher login error:', error);
-            setError(error.response?.data?.message || 'Login failed. Please try again.');
+            if (error.response?.status === 401) {
+                setError('Invalid teacher ID or password');
+            } else if (error.response?.status >= 500) {
+                setError('Server error. Please try again later.');
+            } else {
+                setError(error.response?.data?.message || 'An error occurred during login');
+            }
         } finally {
             setLoading(false);
         }
     };
 
-    return (
-        <div className="min-h-screen bg-gradient-to-br from-[#4CAF50] via-[#45a049] to-[#2E7D33] flex items-center justify-center p-4">
-            {/* Background Pattern */}
-            <div className="absolute inset-0 opacity-10">
-                <div className="absolute top-0 left-0 w-full h-full bg-white/5 rounded-full blur-3xl"></div>
-            </div>
+    const inputClasses = `
+        w-full text-sm px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg
+        focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20
+        text-[#333333] placeholder-[#6C757D]
+        transition-all duration-300
+    `;
 
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-8 w-full max-w-md relative z-10"
+    return (
+        <div className="min-h-screen bg-gradient-to-br from-[#3B82F6]/5 via-white to-[#06B6D4]/5 relative overflow-hidden">
+            {/* Back Button */}
+            <button
+                onClick={() => navigate('/')}
+                className="absolute top-6 left-6 z-50 flex items-center gap-2 px-4 py-2.5 text-[#3B82F6] bg-transparent hover:bg-white/90 rounded-xl transition-all duration-300 shadow-sm hover:shadow-lg border border-[#3B82F6]/20"
             >
-                {/* Header */}
-                <div className="text-center mb-8">
-                    <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                        className="w-20 h-20 bg-gradient-to-br from-[#4CAF50] to-[#45a049] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg"
-                    >
-                        <i className="ri-user-star-line text-3xl text-white"></i>
-                    </motion.div>
-                    <h1 className="text-3xl font-bold text-gray-800 mb-2">Teacher Portal</h1>
-                    <p className="text-gray-600">College ERP Faculty Access</p>
+                <i className="ri-arrow-left-s-line text-xl"></i>
+                <span className="font-medium">Back to Home</span>
+            </button>
+
+            <div className="absolute inset-0 bg-[#3B82F6]/5 backdrop-blur-3xl"></div>
+            
+            <div className="relative min-h-screen sm:flex sm:flex-row justify-center items-center">
+                {/* Left side content */}
+                <div className="flex-col flex self-center lg:px-14 sm:max-w-4xl xl:max-w-md z-10">
+                    <div className="self-start lg:flex flex-col text-[#333333]">
+                        <motion.div
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="mb-6"
+                        >
+                            <div className="inline-flex items-center">
+                                <div className="w-8 h-8 bg-[#3B82F6] rounded-lg flex items-center justify-center">
+                                    <i className="ri-user-star-line text-white text-lg"></i>
+                                </div>
+                                <span className="ml-2 text-lg font-bold text-[#333333]">
+                                    Teacher<span className="text-[#3B82F6]">Portal</span>
+                                </span>
+                            </div>
+                        </motion.div>
+                        
+                        <h1 className="mb-2 font-semibold text-3xl">Faculty Access</h1>
+                        <p className="pr-3 text-sm text-[#6C757D] opacity-75">
+                            Sign in to access your teaching dashboard and student management tools
+                        </p>
+                    </div>
                 </div>
 
                 {/* Login Form */}
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    {error && (
-                        <motion.div
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm"
-                        >
-                            <div className="flex items-center gap-2">
-                                <i className="ri-error-warning-line"></i>
-                                {error}
-                            </div>
-                        </motion.div>
-                    )}
+                <div className="flex justify-center self-center z-10">
+                    <motion.div 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="p-8 bg-white/80 backdrop-blur-xl mx-auto rounded-2xl w-[400px] shadow-xl"
+                    >
+                        <div className="mb-6">
+                            <h3 className="font-semibold text-xl text-[#333333]">Teacher Login</h3>
+                            <p className="text-sm text-[#6C757D]">
+                                Access your teaching dashboard
+                            </p>
+                        </div>
 
-                    {/* Teacher ID Field */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Teacher ID
-                        </label>
-                        <div className="relative">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i className="ri-user-star-line text-gray-400 text-lg"></i>
+                        {/* Teacher Features */}
+                        <div className="grid grid-cols-2 gap-3 mb-6">
+                            <div className="flex items-center justify-center gap-2 p-3 border border-gray-200 rounded-xl bg-[#3B82F6]/5">
+                                <i className="ri-book-open-line text-[#3B82F6]"></i>
+                                <span className="text-sm text-[#3B82F6]">Classes</span>
                             </div>
+                            <div className="flex items-center justify-center gap-2 p-3 border border-gray-200 rounded-xl bg-[#06B6D4]/5">
+                                <i className="ri-user-follow-line text-[#06B6D4]"></i>
+                                <span className="text-sm text-[#06B6D4]">Students</span>
+                            </div>
+                        </div>
+
+                        <div className="relative my-6">
+                            <div className="absolute inset-0 flex items-center">
+                                <div className="w-full border-t border-gray-200"></div>
+                            </div>
+                            <div className="relative flex justify-center text-xs">
+                                <span className="px-4 bg-white text-[#6C757D]">faculty member access</span>
+                            </div>
+                        </div>
+
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            {error && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="p-3 rounded-lg bg-red-50 text-red-500 text-sm border border-red-100"
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <i className="ri-error-warning-line"></i>
+                                        {error}
+                                    </div>
+                                </motion.div>
+                            )}
+
+                            {/* Access Information */}
+                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                                <div className="flex items-start gap-2">
+                                    <i className="ri-information-line text-blue-500 text-sm mt-0.5"></i>
+                                    <div>
+                                        <h4 className="text-xs font-medium text-blue-800 mb-1">Faculty Access</h4>
+                                        <p className="text-xs text-blue-700">
+                                            Use your assigned teacher ID and password
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <input
                                 type="text"
                                 name="teacherId"
                                 value={formData.teacherId}
                                 onChange={handleChange}
+                                className={inputClasses}
+                                placeholder="Teacher ID"
                                 required
-                                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white"
-                                placeholder="Enter teacher ID"
                             />
-                        </div>
-                    </div>
 
-                    {/* Password Field */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Password
-                        </label>
-                        <div className="relative">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i className="ri-lock-line text-gray-400 text-lg"></i>
-                            </div>
                             <input
                                 type="password"
                                 name="password"
                                 value={formData.password}
                                 onChange={handleChange}
+                                className={inputClasses}
+                                placeholder="Password"
                                 required
-                                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white"
-                                placeholder="Enter password"
                             />
+
+                            <div className="flex items-center justify-between">
+                                <label className="flex items-center">
+                                    <input type="checkbox" className="rounded border-gray-300 text-[#3B82F6] focus:ring-[#3B82F6]/20" />
+                                    <span className="ml-2 text-sm text-[#6C757D]">Remember session</span>
+                                </label>
+                                <span className="text-sm text-[#6C757D]">
+                                    Faculty Access
+                                </span>
+                            </div>
+
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className={`
+                                    w-full py-2.5 rounded-lg font-semibold transition duration-300
+                                    ${loading 
+                                        ? 'bg-gray-300 cursor-not-allowed' 
+                                        : 'bg-gradient-to-r from-[#3B82F6] to-[#2563EB] hover:from-[#2563EB] hover:to-[#3B82F6] text-white shadow-md shadow-[#3B82F6]/20'
+                                    }
+                                `}
+                            >
+                                {loading ? (
+                                    <div className="flex items-center justify-center gap-2">
+                                        <i className="ri-loader-4-line animate-spin"></i>
+                                        Authenticating...
+                                    </div>
+                                ) : (
+                                    <div className="flex items-center justify-center gap-2">
+                                        <i className="ri-user-star-line"></i>
+                                        Access Dashboard
+                                    </div>
+                                )}
+                            </button>
+                        </form>
+
+                        <div className="mt-6 text-center">
+                            <p className="text-xs text-[#6C757D]">
+                                Faculty access to{' '}
+                                <span className="text-[#3B82F6] font-medium">College ERP System</span>
+                            </p>
                         </div>
-                    </div>
-
-                    {/* Login Button */}
-                    <motion.button
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        type="submit"
-                        disabled={loading}
-                        className={`w-full py-3 px-4 rounded-xl font-semibold text-white transition-all duration-200 ${
-                            loading
-                                ? 'bg-gray-400 cursor-not-allowed'
-                                : 'bg-gradient-to-r from-[#4CAF50] to-[#45a049] hover:from-[#45a049] hover:to-[#4CAF50] shadow-lg hover:shadow-xl'
-                        }`}
-                    >
-                        {loading ? (
-                            <div className="flex items-center justify-center gap-2">
-                                <i className="ri-loader-4-line animate-spin"></i>
-                                Signing in...
-                            </div>
-                        ) : (
-                            <div className="flex items-center justify-center gap-2">
-                                <i className="ri-login-box-line"></i>
-                                Sign In to Teacher Portal
-                            </div>
-                        )}
-                    </motion.button>
-                </form>
-
-                {/* Footer */}
-                <div className="mt-8 text-center">
-                    <p className="text-sm text-gray-500">
-                        Need help? Contact system administrator
-                    </p>
-                    <button
-                        onClick={() => navigate('/')}
-                        className="mt-3 text-sm text-[#4CAF50] hover:text-[#45a049] transition-colors font-medium"
-                    >
-                        ← Back to Main Site
-                    </button>
+                    </motion.div>
                 </div>
-            </motion.div>
+            </div>
 
-            {/* Floating Elements */}
-            <div className="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
-            <div className="absolute bottom-10 right-10 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
-            <div className="absolute top-1/3 right-20 w-16 h-16 bg-white/10 rounded-full blur-xl"></div>
+            {/* Background decoration */}
+            <div className="absolute bottom-0 left-0 right-0">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+                    <path fill="#3B82F6" fillOpacity="0.05" d="M0,224L80,197.3C160,171,320,117,480,117.3C640,117,800,171,960,197.3C1120,224,1280,224,1360,224L1440,224L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+                </svg>
+            </div>
         </div>
     );
 };

@@ -60,23 +60,23 @@ const Login = () => {
 
   const inputClasses = `
     w-full text-sm px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg
-    focus:outline-none focus:border-[#4CAF50] focus:ring-2 focus:ring-[#4CAF50]/20
+    focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20
     text-[#333333] placeholder-[#6C757D]
     transition-all duration-300
   `;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#4CAF50]/5 via-white to-[#4CAF50]/5 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-[#3B82F6]/5 via-white to-[#3B82F6]/5 relative overflow-hidden">
       {/* Add Back Button */}
       <button
         onClick={() => navigate('/')}
-        className="absolute top-6 left-6 z-50 flex items-center gap-2 px-4 py-2.5 text-[#4CAF50] bg-transparent hover:bg-white/90 rounded-xl transition-all duration-300 shadow-sm hover:shadow-lg border border-[#4CAF50]/20"
+        className="absolute top-6 left-6 z-50 flex items-center gap-2 px-4 py-2.5 text-[#3B82F6] bg-transparent hover:bg-white/90 rounded-xl transition-all duration-300 shadow-sm hover:shadow-lg border border-[#3B82F6]/20"
       >
         <i className="ri-arrow-left-s-line text-xl"></i>
         <span className="font-medium">Back to Home</span>
       </button>
 
-      <div className="absolute inset-0 bg-[#4CAF50]/5 backdrop-blur-3xl"></div>
+      <div className="absolute inset-0 bg-[#3B82F6]/5 backdrop-blur-3xl"></div>
       
       <div className="relative min-h-screen sm:flex sm:flex-row justify-center items-center">
         {/* Left side content */}
@@ -88,11 +88,11 @@ const Login = () => {
               className="mb-6"
             >
               <Link to="/" className="inline-flex items-center">
-                <div className="w-8 h-8 bg-[#4CAF50] rounded-lg flex items-center justify-center">
-                  <span className="text-lg font-bold text-white">C</span>
+                <div className="w-8 h-8 bg-[#3B82F6] rounded-lg flex items-center justify-center">
+                  <span className="text-lg font-bold text-white">S</span>
                 </div>
                 <span className="ml-2 text-lg font-bold text-[#333333]">
-                  College<span className="text-[#4CAF50]">ERP</span>
+                  Smart<span className="text-[#3B82F6]">ERP</span>
                 </span>
               </Link>
             </motion.div>
@@ -115,18 +115,18 @@ const Login = () => {
               <h3 className="font-semibold text-xl text-[#333333]">Sign In</h3>
               <p className="text-sm text-[#6C757D]">
                 Don't have an account?{' '}
-                <Link to="/signup" className="text-[#4CAF50] hover:text-[#45a049]">
+                <Link to="/signup" className="text-[#3B82F6] hover:text-[#2563EB]">
                   Sign Up
                 </Link>
               </p>
             </div>
 
             <div className="grid grid-cols-2 gap-3 mb-6">
-              <button className="flex items-center justify-center gap-2 p-3 border border-gray-200 rounded-xl hover:border-[#4CAF50]/20 hover:bg-[#4CAF50]/5 transition duration-300">
+              <button className="flex items-center justify-center gap-2 p-3 border border-gray-200 rounded-xl hover:border-[#3B82F6]/20 hover:bg-[#3B82F6]/5 transition duration-300">
                 <img className="w-5 h-5" src="https://static.cdnlogo.com/logos/g/35/google-icon.svg" alt="Google" />
                 <span className="text-sm">Google</span>
               </button>
-              <button className="flex items-center justify-center gap-2 p-3 border border-gray-200 rounded-xl hover:border-[#4CAF50]/20 hover:bg-[#4CAF50]/5 transition duration-300">
+              <button className="flex items-center justify-center gap-2 p-3 border border-gray-200 rounded-xl hover:border-[#3B82F6]/20 hover:bg-[#3B82F6]/5 transition duration-300">
                 <i className="ri-apple-fill text-xl"></i>
                 <span className="text-sm">Apple</span>
               </button>
@@ -184,10 +184,10 @@ const Login = () => {
 
               <div className="flex items-center justify-between">
                 <label className="flex items-center">
-                  <input type="checkbox" className="rounded border-gray-300 text-[#4CAF50] focus:ring-[#4CAF50]/20" />
+                  <input type="checkbox" className="rounded border-gray-300 text-[#3B82F6] focus:ring-[#3B82F6]/20" />
                   <span className="ml-2 text-sm text-[#6C757D]">Remember me</span>
                 </label>
-                <Link to="/forgot-password" className="text-sm text-[#4CAF50] hover:text-[#45a049]">
+                <Link to="/forgot-password" className="text-sm text-[#3B82F6] hover:text-[#2563EB]">
                   Forgot password?
                 </Link>
               </div>
@@ -199,7 +199,7 @@ const Login = () => {
                   w-full py-2.5 rounded-lg font-semibold transition duration-300
                   ${loading 
                     ? 'bg-gray-300 cursor-not-allowed' 
-                    : 'bg-[#4CAF50] hover:bg-[#45a049] text-white shadow-md shadow-[#4CAF50]/20'
+                    : 'bg-[#3B82F6] hover:bg-[#2563EB] text-white shadow-md shadow-[#3B82F6]/20'
                   }
                 `}
               >
@@ -210,9 +210,9 @@ const Login = () => {
             <div className="mt-6 text-center">
               <p className="text-xs text-[#6C757D]">
                 By signing in, you agree to our{' '}
-                <a href="/terms" className="text-[#4CAF50] hover:underline">Terms of Service</a>
+                <a href="/terms" className="text-[#3B82F6] hover:underline">Terms of Service</a>
                 {' '}and{' '}
-                <a href="/privacy" className="text-[#4CAF50] hover:underline">Privacy Policy</a>
+                <a href="/privacy" className="text-[#3B82F6] hover:underline">Privacy Policy</a>
               </p>
             </div>
           </motion.div>
@@ -222,7 +222,7 @@ const Login = () => {
       {/* Background decoration */}
       <div className="absolute bottom-0 left-0 right-0">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-          <path fill="#4CAF50" fillOpacity="0.05" d="M0,224L80,197.3C160,171,320,117,480,117.3C640,117,800,171,960,197.3C1120,224,1280,224,1360,224L1440,224L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+          <path fill="#3B82F6" fillOpacity="0.05" d="M0,224L80,197.3C160,171,320,117,480,117.3C640,117,800,171,960,197.3C1120,224,1280,224,1360,224L1440,224L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
         </svg>
       </div>
     </div>

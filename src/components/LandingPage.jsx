@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import HeroSlider from './HeroSlider';
 
 const LandingPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -69,66 +70,9 @@ const LandingPage = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Navbar */}
-      {/* <Navbar /> */}
+      {/* Hero Slider */}
+      <HeroSlider />
       
-      {/* Hero Section */}
-      <section id="home" className="relative bg-gradient-to-br from-blue-600 via-purple-600 to-purple-800 text-white pt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            <div className="text-center lg:text-left">
-              <h1 className="text-4xl lg:text-6xl font-bold leading-tight mb-6">
-                Smart College ERP
-                <span className="text-yellow-300 block lg:inline"> Simplified</span>
-              </h1>
-              <p className="text-xl lg:text-2xl mb-8 text-blue-100 leading-relaxed">
-                Transform your institution with an integrated, cloud-based ERP system. 
-                Streamline admissions, fee collection, hostel management, and more - 
-                all without breaking the budget.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <button className="bg-red-500 hover:bg-red-600 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl">
-                  Get Started
-                </button>
-                <button className="border-2 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105">
-                  Watch Demo
-                </button>
-              </div>
-            </div>
-            
-            {/* Dashboard Preview */}
-            <div className="flex justify-center lg:justify-end">
-              <div className="bg-white rounded-2xl shadow-2xl overflow-hidden max-w-md w-full transform perspective-1000 rotate-y-5 rotate-x-5">
-                <div className="bg-gray-50 border-b border-gray-200 p-4">
-                  <div className="flex space-x-6">
-                    <span className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium">Dashboard</span>
-                    <span className="text-gray-500 px-4 py-2 text-sm font-medium cursor-pointer hover:text-gray-700">Students</span>
-                    <span className="text-gray-500 px-4 py-2 text-sm font-medium cursor-pointer hover:text-gray-700">Finance</span>
-                    <span className="text-gray-500 px-4 py-2 text-sm font-medium cursor-pointer hover:text-gray-700">Hostel</span>
-                  </div>
-                </div>
-                <div className="p-6 text-gray-800">
-                  <div className="space-y-4">
-                    <div className="bg-blue-50 p-5 rounded-xl border-l-4 border-blue-500">
-                      <h4 className="text-sm text-gray-600 mb-2">Total Students</h4>
-                      <p className="text-3xl font-bold text-gray-900">2,847</p>
-                    </div>
-                    <div className="bg-green-50 p-5 rounded-xl border-l-4 border-green-500">
-                      <h4 className="text-sm text-gray-600 mb-2">Fee Collection</h4>
-                      <p className="text-3xl font-bold text-gray-900">₹84.2L</p>
-                    </div>
-                    <div className="bg-purple-50 p-5 rounded-xl border-l-4 border-purple-500">
-                      <h4 className="text-sm text-gray-600 mb-2">Hostel Occupancy</h4>
-                      <p className="text-3xl font-bold text-gray-900">89%</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Portal Access Section */}
       <section className="py-16 bg-gradient-to-r from-green-50 to-blue-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

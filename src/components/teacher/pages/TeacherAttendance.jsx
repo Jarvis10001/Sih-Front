@@ -200,21 +200,40 @@ const TeacherAttendance = () => {
 
   // Download sample template
   const downloadTemplate = () => {
-    const csvContent = `Date: ${new Date().toLocaleDateString()}
+    const today = new Date().toISOString().split('T')[0];
+    const csvContent = `# Student Attendance Template
+# Instructions:
+# 1. Fill in your class information below (optional header info)
+# 2. Update the SID and Status columns with your student data
+# 3. Status options: Present, Absent, Late, Excused (or P/A/L/E)
+# 4. Save as CSV and upload through the dashboard
+
+Date: ${today}
+Class: [Your Subject] - Section [A/B/C] - Semester [1-8]
+Teacher: [Your Name] ([Your Teacher ID])
+
 SID,Status
 STU001,Present
 STU002,Absent
 STU003,Present
 STU004,Late
-STU005,Excused`;
+STU005,Excused
+STU006,Present
+STU007,Absent
+STU008,Late
+STU009,Present
+STU010,Excused`;
 
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'attendance_template.csv';
+    a.download = `attendance_template_${today}.csv`;
     a.click();
     window.URL.revokeObjectURL(url);
+    
+    // Show help message
+    toast.info('Template downloaded! Fill in the SID and Status columns, then upload back through this page.');
   };
 
   const formatDate = (dateString) => {

@@ -35,7 +35,7 @@ const Sidebar = () => {
     <>
       {/* Mobile menu button */}
       <button
-        className="fixed top-4 left-4 z-40 p-2 rounded-xl bg-[#4CAF50] text-white shadow-lg md:hidden hover:bg-[#45a049] transition-colors duration-300"
+        className="fixed top-4 left-4 z-40 p-2 rounded-xl bg-gradient-to-br from-[#1E3A8A] to-[#0C4A6E] text-white shadow-lg md:hidden hover:shadow-xl transition-all duration-300"
         onClick={() => setIsOpen(true)}
       >
         <i className="ri-menu-line text-xl" />
@@ -51,11 +51,11 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <aside className={`fixed top-0 left-0 z-50 h-full flex flex-col transition-all duration-300 ease-in-out
-        bg-gradient-to-b from-[#4CAF50] to-[#45a049] border-r border-white/10
+        bg-gradient-to-b from-[#1E3A8A] to-[#0C4A6E] border-r border-white/10
         ${isOpen ? 'w-72' : 'w-20'}`}
       >
         {/* Header */}
-        <div className="flex-shrink-0 p-5 border-b border-white/10 bg-[#45a049]/50 overflow-hidden">
+        <div className="flex-shrink-0 p-5 border-b border-white/10 bg-[#0C4A6E]/50 overflow-hidden">
           <Link to="/dashboard" className="flex items-center gap-2">
             <div className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-colors duration-300">
               <i className="ri-graduation-cap-line text-xl text-white" />
@@ -63,7 +63,7 @@ const Sidebar = () => {
             <span className={`text-xl font-bold text-white transition-opacity duration-300 ${
               isOpen ? 'opacity-100' : 'opacity-0'
             }`}>
-              College<span className="text-green-100">ERP</span>
+              College<span className="text-blue-200">ERP</span>
             </span>
           </Link>
           
@@ -86,7 +86,7 @@ const Sidebar = () => {
               <p className="text-white font-medium text-sm truncate">
                 {userData?.name || 'User'}
               </p>
-              <p className="text-green-100 text-xs truncate">
+              <p className="text-blue-200 text-xs truncate">
                 {userData?.email || 'user@college.edu'}
               </p>
             </div>
@@ -102,8 +102,8 @@ const Sidebar = () => {
                 to={item.path}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group
                   ${location.pathname === item.path
-                    ? 'bg-white/20 text-white' 
-                    : 'text-white/70 hover:bg-white/10 hover:text-white'
+                    ? 'bg-gradient-to-r from-white/20 to-cyan-300/20 text-white shadow-lg' 
+                    : 'text-white/70 hover:bg-gradient-to-r hover:from-white/10 hover:to-cyan-300/10 hover:text-white'
                   }`}
               >
                 <i className={`${item.icon} text-lg ${
@@ -125,7 +125,7 @@ const Sidebar = () => {
         <div className="p-4 border-t border-white/10">
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 hover:text-white transition-all duration-300"
+            className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-white/70 hover:bg-gradient-to-r hover:from-white/10 hover:to-cyan-300/10 hover:text-white transition-all duration-300"
           >
             <i className="ri-logout-box-line text-lg" />
             <span className={`text-sm font-medium whitespace-nowrap transition-all duration-300 ${

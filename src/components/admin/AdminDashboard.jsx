@@ -4,11 +4,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import TeacherForm from './TeacherForm';
 import ClerkForm from './ClerkForm';
+import AdminSidebar from './AdminSidebar';
+import AdminTopNav from './AdminTopNav';
 import { validateAdminToken, getAdminTokenInfo } from '../../utils/tokenUtils';
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('overview');
+    const [sidebarOpen, setSidebarOpen] = useState(true);
     const [teachers, setTeachers] = useState([]);
     const [clerks, setClerks] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -642,7 +645,7 @@ const AdminDashboard = () => {
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={() => setShowAddTeacher(true)}
-                        className="bg-[#4CAF50] text-white px-4 py-2 rounded-xl font-medium hover:bg-[#45a049] transition-colors flex items-center gap-2"
+                        className="bg-[#3B82F6] text-white px-4 py-2 rounded-xl font-medium hover:bg-[#2563EB] transition-colors flex items-center gap-2"
                     >
                         <i className="ri-add-line"></i>
                         Add Teacher
@@ -683,7 +686,7 @@ const AdminDashboard = () => {
                                 >
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="flex items-center">
-                                            <div className="w-10 h-10 bg-gradient-to-br from-[#4CAF50] to-[#45a049] rounded-full flex items-center justify-center text-white font-semibold">
+                                            <div className="w-10 h-10 bg-gradient-to-br from-[#3B82F6] to-[#2563EB] rounded-full flex items-center justify-center text-white font-semibold">
                                                 {teacher.name?.charAt(0).toUpperCase()}
                                             </div>
                                             <div className="ml-4">
@@ -745,7 +748,7 @@ const AdminDashboard = () => {
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={() => setShowAddClerk(true)}
-                        className="bg-[#4CAF50] text-white px-4 py-2 rounded-xl font-medium hover:bg-[#45a049] transition-colors flex items-center gap-2"
+                        className="bg-[#3B82F6] text-white px-4 py-2 rounded-xl font-medium hover:bg-[#2563EB] transition-colors flex items-center gap-2"
                     >
                         <i className="ri-add-line"></i>
                         Add Clerk
@@ -787,7 +790,7 @@ const AdminDashboard = () => {
                                 >
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="flex items-center">
-                                            <div className="w-10 h-10 bg-gradient-to-br from-[#4CAF50] to-[#45a049] rounded-full flex items-center justify-center text-white font-semibold">
+                                            <div className="w-10 h-10 bg-gradient-to-br from-[#3B82F6] to-[#2563EB] rounded-full flex items-center justify-center text-white font-semibold">
                                                 {clerk.personalInfo?.fullName?.charAt(0).toUpperCase()}
                                             </div>
                                             <div className="ml-4">
@@ -851,131 +854,170 @@ const AdminDashboard = () => {
         </div>
     );
 
+    const toggleSidebar = () => {
+        setSidebarOpen(!sidebarOpen);
+    };
+
+    const renderContent = () => {
+        switch (activeTab) {
+            case 'overview':
+                return renderOverview();
+            case 'teachers':
+                return renderTeachers();
+            case 'clerks':
+                return renderClerks();
+            case 'students':
+                return renderStudents();
+            case 'courses':
+                return renderCourses();
+            case 'departments':
+                return renderDepartments();
+            case 'academic-calendar':
+                return renderAcademicCalendar();
+            case 'applications':
+                return renderApplications();
+            case 'admission-reports':
+                return renderAdmissionReports();
+            case 'fee-management':
+                return renderFeeManagement();
+            case 'payroll':
+                return renderPayroll();
+            case 'financial-reports':
+                return renderFinancialReports();
+            case 'settings':
+                return renderSettings();
+            default:
+                return renderOverview();
+        }
+    };
+
+    // Placeholder render functions for new sections
+    const renderStudents = () => (
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 text-center">
+            <i className="ri-graduation-cap-line text-4xl text-[#3B82F6] mb-4"></i>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Student Management</h3>
+            <p className="text-gray-600">Coming soon - Student management features</p>
+        </div>
+    );
+
+    const renderCourses = () => (
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 text-center">
+            <i className="ri-book-line text-4xl text-[#3B82F6] mb-4"></i>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Course Management</h3>
+            <p className="text-gray-600">Coming soon - Course management features</p>
+        </div>
+    );
+
+    const renderDepartments = () => (
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 text-center">
+            <i className="ri-building-line text-4xl text-[#3B82F6] mb-4"></i>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Department Management</h3>
+            <p className="text-gray-600">Coming soon - Department management features</p>
+        </div>
+    );
+
+    const renderAcademicCalendar = () => (
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 text-center">
+            <i className="ri-calendar-line text-4xl text-[#3B82F6] mb-4"></i>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Academic Calendar</h3>
+            <p className="text-gray-600">Coming soon - Academic calendar features</p>
+        </div>
+    );
+
+    const renderApplications = () => (
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 text-center">
+            <i className="ri-file-text-line text-4xl text-[#3B82F6] mb-4"></i>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Admission Applications</h3>
+            <p className="text-gray-600">Coming soon - Application management features</p>
+        </div>
+    );
+
+    const renderAdmissionReports = () => (
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 text-center">
+            <i className="ri-bar-chart-line text-4xl text-[#3B82F6] mb-4"></i>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Admission Reports</h3>
+            <p className="text-gray-600">Coming soon - Admission reporting features</p>
+        </div>
+    );
+
+    const renderFeeManagement = () => (
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 text-center">
+            <i className="ri-wallet-line text-4xl text-[#3B82F6] mb-4"></i>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Fee Management</h3>
+            <p className="text-gray-600">Coming soon - Fee management features</p>
+        </div>
+    );
+
+    const renderPayroll = () => (
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 text-center">
+            <i className="ri-bank-line text-4xl text-[#3B82F6] mb-4"></i>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Payroll Management</h3>
+            <p className="text-gray-600">Coming soon - Payroll management features</p>
+        </div>
+    );
+
+    const renderFinancialReports = () => (
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 text-center">
+            <i className="ri-line-chart-line text-4xl text-[#3B82F6] mb-4"></i>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Financial Reports</h3>
+            <p className="text-gray-600">Coming soon - Financial reporting features</p>
+        </div>
+    );
+
+    const renderSettings = () => (
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 text-center">
+            <i className="ri-settings-3-line text-4xl text-[#3B82F6] mb-4"></i>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">System Settings</h3>
+            <p className="text-gray-600">Coming soon - System configuration features</p>
+        </div>
+    );
+
     return (
-        <div className="min-h-screen bg-gray-50">
-            {/* Header */}
-            <div className="bg-white shadow-sm border-b border-gray-200">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center justify-between h-16">
-                        <div className="flex items-center gap-4">
-                            <div className="w-10 h-10 bg-gradient-to-br from-[#4CAF50] to-[#45a049] rounded-xl flex items-center justify-center">
-                                <i className="ri-admin-line text-white text-lg"></i>
-                            </div>
-                            <div>
-                                <h1 className="text-xl font-semibold text-gray-900">Admin Dashboard</h1>
-                                <p className="text-sm text-gray-600">College ERP Administration</p>
-                            </div>
-                        </div>
+        <div className="min-h-screen bg-gray-50 flex">
+            {/* Admin Sidebar */}
+            <AdminSidebar 
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+                isOpen={sidebarOpen}
+                setIsOpen={setSidebarOpen}
+            />
 
-                        <div className="flex items-center gap-4">
-                            <div className="text-right">
-                                <p className="text-sm font-medium text-gray-900">
-                                    Welcome, {adminData?.username}
-                                </p>
-                                <p className="text-xs text-gray-500">
-                                    {adminData?.role} Administrator
-                                </p>
-                                {(() => {
-                                    const tokenInfo = getAdminTokenInfo();
-                                    if (tokenInfo) {
-                                        const isExpiringSoon = tokenInfo.timeLeft < 60 * 60 * 1000; // Less than 1 hour
-                                        return (
-                                            <p className={`text-xs ${isExpiringSoon ? 'text-orange-600' : 'text-green-600'}`}>
-                                                <i className={`ri-time-line ${isExpiringSoon ? 'text-orange-500' : 'text-green-500'}`}></i>
-                                                {' '}Token: {tokenInfo.hoursLeft}h {tokenInfo.minutesLeft}m left
-                                            </p>
-                                        );
-                                    }
-                                    return null;
-                                })()}
-                            </div>
-                            <button
-                                onClick={handleLogout}
-                                className="bg-red-100 text-red-700 px-4 py-2 rounded-xl font-medium hover:bg-red-200 transition-colors flex items-center gap-2"
-                            >
-                                <i className="ri-logout-box-line"></i>
-                                Logout
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {/* Main Content Area */}
+            <div className="flex-1 flex flex-col min-w-0">
+                {/* Top Navigation */}
+                <AdminTopNav 
+                    activeTab={activeTab}
+                    isOpen={sidebarOpen}
+                    toggleSidebar={toggleSidebar}
+                />
 
-            {/* Navigation Tabs */}
-            <div className="bg-white border-b border-gray-200">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <nav className="flex space-x-8">
-                        {[
-                            { id: 'overview', label: 'Overview', icon: 'ri-dashboard-line' },
-                            { id: 'teachers', label: 'Teachers', icon: 'ri-team-line' },
-                            { id: 'clerks', label: 'Clerks', icon: 'ri-user-settings-line' },
-                        ].map((tab) => (
-                            <button
-                                key={tab.id}
-                                onClick={() => setActiveTab(tab.id)}
-                                className={`flex items-center gap-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                                    activeTab === tab.id
-                                        ? 'border-[#4CAF50] text-[#4CAF50]'
-                                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                                }`}
-                            >
-                                <i className={tab.icon}></i>
-                                {tab.label}
-                            </button>
-                        ))}
-                    </nav>
-                </div>
-            </div>
-
-            {/* Main Content */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {error && (
-                    <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6"
-                    >
-                        <div className="flex items-center gap-2">
-                            <i className="ri-error-warning-line"></i>
-                            {error}
-                        </div>
-                    </motion.div>
-                )}
-
-                <AnimatePresence mode="wait">
-                    {activeTab === 'overview' && (
+                {/* Main Content */}
+                <main className="flex-1 p-6">
+                    {error && (
                         <motion.div
-                            key="overview"
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6"
                         >
-                            {renderOverview()}
+                            <div className="flex items-center gap-2">
+                                <i className="ri-error-warning-line"></i>
+                                {error}
+                            </div>
                         </motion.div>
                     )}
 
-                    {activeTab === 'teachers' && (
+                    <AnimatePresence mode="wait">
                         <motion.div
-                            key="teachers"
+                            key={activeTab}
                             initial={{ opacity: 0, x: 20 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: -20 }}
+                            transition={{ duration: 0.2 }}
                         >
-                            {renderTeachers()}
+                            {renderContent()}
                         </motion.div>
-                    )}
-
-                    {activeTab === 'clerks' && (
-                        <motion.div
-                            key="clerks"
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                        >
-                            {renderClerks()}
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+                    </AnimatePresence>
+                </main>
             </div>
 
             {/* Enhanced Teacher Form Modal */}

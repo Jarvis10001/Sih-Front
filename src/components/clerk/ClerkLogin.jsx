@@ -17,7 +17,7 @@ const ClerkLogin = () => {
             ...formData,
             [e.target.name]: e.target.value
         });
-        setError(''); // Clear error when user starts typing
+        setError('');
     };
 
     const handleSubmit = async (e) => {
@@ -34,140 +34,198 @@ const ClerkLogin = () => {
                 navigate('/clerk/dashboard');
             }
         } catch (error) {
-            setError(error.response?.data?.message || 'Login failed. Please try again.');
+            console.error('Clerk login error:', error);
+            if (error.response?.status === 401) {
+                setError('Invalid employee ID or password');
+            } else if (error.response?.status >= 500) {
+                setError('Server error. Please try again later.');
+            } else {
+                setError(error.response?.data?.message || 'An error occurred during login');
+            }
         } finally {
             setLoading(false);
         }
     };
 
+    const inputClasses = `
+        w-full text-sm px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg
+        focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20
+        text-[#333333] placeholder-[#6C757D]
+        transition-all duration-300
+    `;
+
     return (
-        <div className="min-h-screen bg-gradient-to-br from-[#E8F5E8] via-[#F0F8F0] to-[#E8F5E8] flex items-center justify-center p-4">
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-md"
+        <div className="min-h-screen bg-gradient-to-br from-[#3B82F6]/5 via-white to-[#06B6D4]/5 relative overflow-hidden">
+            {/* Back Button */}
+            <button
+                onClick={() => navigate('/')}
+                className="absolute top-6 left-6 z-50 flex items-center gap-2 px-4 py-2.5 text-[#3B82F6] bg-transparent hover:bg-white/90 rounded-xl transition-all duration-300 shadow-sm hover:shadow-lg border border-[#3B82F6]/20"
             >
-                {/* Header */}
-                <div className="text-center mb-8">
-                    <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                        className="w-16 h-16 bg-gradient-to-br from-[#4CAF50] to-[#45a049] rounded-2xl mx-auto mb-4 flex items-center justify-center"
-                    >
-                        <i className="ri-user-settings-line text-white text-2xl"></i>
-                    </motion.div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Clerk Login</h2>
-                    <p className="text-gray-600">Access your clerk dashboard</p>
+                <i className="ri-arrow-left-s-line text-xl"></i>
+                <span className="font-medium">Back to Home</span>
+            </button>
+
+            <div className="absolute inset-0 bg-[#3B82F6]/5 backdrop-blur-3xl"></div>
+            
+            <div className="relative min-h-screen sm:flex sm:flex-row justify-center items-center">
+                {/* Left side content */}
+                <div className="flex-col flex self-center lg:px-14 sm:max-w-4xl xl:max-w-md z-10">
+                    <div className="self-start lg:flex flex-col text-[#333333]">
+                        <motion.div
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="mb-6"
+                        >
+                            <div className="inline-flex items-center">
+                                <div className="w-8 h-8 bg-[#3B82F6] rounded-lg flex items-center justify-center">
+                                    <i className="ri-user-settings-line text-white text-lg"></i>
+                                </div>
+                                <span className="ml-2 text-lg font-bold text-[#333333]">
+                                    Clerk<span className="text-[#3B82F6]">Portal</span>
+                                </span>
+                            </div>
+                        </motion.div>
+                        
+                        <h1 className="mb-2 font-semibold text-3xl">Staff Access</h1>
+                        <p className="pr-3 text-sm text-[#6C757D] opacity-75">
+                            Sign in to access your clerk dashboard and manage student services
+                        </p>
+                    </div>
                 </div>
 
-                {/* Error Alert */}
-                {error && (
-                    <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6"
-                    >
-                        <div className="flex items-center gap-2">
-                            <i className="ri-error-warning-line"></i>
-                            {error}
-                        </div>
-                    </motion.div>
-                )}
-
                 {/* Login Form */}
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                            Employee ID
-                        </label>
-                        <div className="relative">
+                <div className="flex justify-center self-center z-10">
+                    <motion.div 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="p-8 bg-white/80 backdrop-blur-xl mx-auto rounded-2xl w-[400px] shadow-xl"
+                    >
+                        <div className="mb-6">
+                            <h3 className="font-semibold text-xl text-[#333333]">Clerk Login</h3>
+                            <p className="text-sm text-[#6C757D]">
+                                Access your administrative dashboard
+                            </p>
+                        </div>
+
+                        {/* Clerk Features */}
+                        <div className="grid grid-cols-2 gap-3 mb-6">
+                            <div className="flex items-center justify-center gap-2 p-3 border border-gray-200 rounded-xl bg-[#3B82F6]/5">
+                                <i className="ri-file-list-3-line text-[#3B82F6]"></i>
+                                <span className="text-sm text-[#3B82F6]">Records</span>
+                            </div>
+                            <div className="flex items-center justify-center gap-2 p-3 border border-gray-200 rounded-xl bg-[#06B6D4]/5">
+                                <i className="ri-customer-service-2-line text-[#06B6D4]"></i>
+                                <span className="text-sm text-[#06B6D4]">Services</span>
+                            </div>
+                        </div>
+
+                        <div className="relative my-6">
+                            <div className="absolute inset-0 flex items-center">
+                                <div className="w-full border-t border-gray-200"></div>
+                            </div>
+                            <div className="relative flex justify-center text-xs">
+                                <span className="px-4 bg-white text-[#6C757D]">staff member access</span>
+                            </div>
+                        </div>
+
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            {error && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="p-3 rounded-lg bg-red-50 text-red-500 text-sm border border-red-100"
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <i className="ri-error-warning-line"></i>
+                                        {error}
+                                    </div>
+                                </motion.div>
+                            )}
+
+                            {/* Default Credentials Info */}
+                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                                <div className="flex items-start gap-2">
+                                    <i className="ri-information-line text-blue-500 text-sm mt-0.5"></i>
+                                    <div>
+                                        <h4 className="text-xs font-medium text-blue-800 mb-1">Access Information</h4>
+                                        <p className="text-xs text-blue-700">
+                                            Use your assigned employee ID and password
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <input
                                 type="text"
                                 name="employeeId"
                                 value={formData.employeeId}
                                 onChange={handleChange}
+                                className={inputClasses}
+                                placeholder="Employee ID"
                                 required
-                                placeholder="Enter your employee ID"
-                                className="w-full p-4 rounded-xl border-2 border-gray-200 focus:border-[#4CAF50] focus:ring-4 focus:ring-[#4CAF50]/10 transition-all duration-300 pl-12 text-gray-900 placeholder-gray-500"
                             />
-                            <i className="ri-badge-line absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                        </div>
-                    </div>
 
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                            Password
-                        </label>
-                        <div className="relative">
                             <input
                                 type="password"
                                 name="password"
                                 value={formData.password}
                                 onChange={handleChange}
+                                className={inputClasses}
+                                placeholder="Password"
                                 required
-                                placeholder="Enter your password"
-                                className="w-full p-4 rounded-xl border-2 border-gray-200 focus:border-[#4CAF50] focus:ring-4 focus:ring-[#4CAF50]/10 transition-all duration-300 pl-12 text-gray-900 placeholder-gray-500"
                             />
-                            <i className="ri-lock-line absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+
+                            <div className="flex items-center justify-between">
+                                <label className="flex items-center">
+                                    <input type="checkbox" className="rounded border-gray-300 text-[#3B82F6] focus:ring-[#3B82F6]/20" />
+                                    <span className="ml-2 text-sm text-[#6C757D]">Remember session</span>
+                                </label>
+                                <span className="text-sm text-[#6C757D]">
+                                    Staff Access
+                                </span>
+                            </div>
+
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className={`
+                                    w-full py-2.5 rounded-lg font-semibold transition duration-300
+                                    ${loading 
+                                        ? 'bg-gray-300 cursor-not-allowed' 
+                                        : 'bg-gradient-to-r from-[#3B82F6] to-[#2563EB] hover:from-[#2563EB] hover:to-[#3B82F6] text-white shadow-md shadow-[#3B82F6]/20'
+                                    }
+                                `}
+                            >
+                                {loading ? (
+                                    <div className="flex items-center justify-center gap-2">
+                                        <i className="ri-loader-4-line animate-spin"></i>
+                                        Authenticating...
+                                    </div>
+                                ) : (
+                                    <div className="flex items-center justify-center gap-2">
+                                        <i className="ri-user-settings-line"></i>
+                                        Access Dashboard
+                                    </div>
+                                )}
+                            </button>
+                        </form>
+
+                        <div className="mt-6 text-center">
+                            <p className="text-xs text-[#6C757D]">
+                                Administrative staff access to{' '}
+                                <span className="text-[#3B82F6] font-medium">College ERP System</span>
+                            </p>
                         </div>
-                    </div>
-
-                    <motion.button
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        type="submit"
-                        disabled={loading}
-                        className={`w-full py-4 rounded-xl font-semibold text-white transition-all duration-300 ${
-                            loading
-                                ? 'bg-gray-400 cursor-not-allowed'
-                                : 'bg-gradient-to-r from-[#4CAF50] to-[#45a049] hover:from-[#45a049] hover:to-[#4CAF50] shadow-lg hover:shadow-xl'
-                        }`}
-                    >
-                        {loading ? (
-                            <div className="flex items-center justify-center gap-2">
-                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                                Signing In...
-                            </div>
-                        ) : (
-                            <div className="flex items-center justify-center gap-2">
-                                <i className="ri-login-box-line"></i>
-                                Sign In
-                            </div>
-                        )}
-                    </motion.button>
-                </form>
-
-                {/* Footer */}
-                <div className="mt-8 text-center">
-                    <p className="text-sm text-gray-600">
-                        Need help? Contact your system administrator
-                    </p>
-                    <div className="mt-4 flex justify-center space-x-4">
-                        <button
-                            onClick={() => navigate('/student/login')}
-                            className="text-sm text-[#4CAF50] hover:text-[#45a049] font-medium transition-colors"
-                        >
-                            Student Login
-                        </button>
-                        <span className="text-gray-300">|</span>
-                        <button
-                            onClick={() => navigate('/teacher/login')}
-                            className="text-sm text-[#4CAF50] hover:text-[#45a049] font-medium transition-colors"
-                        >
-                            Teacher Login
-                        </button>
-                        <span className="text-gray-300">|</span>
-                        <button
-                            onClick={() => navigate('/admin/login')}
-                            className="text-sm text-[#4CAF50] hover:text-[#45a049] font-medium transition-colors"
-                        >
-                            Admin Login
-                        </button>
-                    </div>
+                    </motion.div>
                 </div>
-            </motion.div>
+            </div>
+
+            {/* Background decoration */}
+            <div className="absolute bottom-0 left-0 right-0">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+                    <path fill="#3B82F6" fillOpacity="0.05" d="M0,224L80,197.3C160,171,320,117,480,117.3C640,117,800,171,960,197.3C1120,224,1280,224,1360,224L1440,224L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+                </svg>
+            </div>
         </div>
     );
 };

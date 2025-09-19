@@ -125,15 +125,15 @@ const TeacherDashboardHome = () => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-300"
+      className="bg-white rounded-xl p-6 shadow-sm border border-gray-200"
     >
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-gray-600">{title}</p>
-          <p className="text-3xl font-bold text-gray-900 mt-2">{value}</p>
+          <p className="text-gray-600 text-sm">{title}</p>
+          <p className="text-2xl font-bold text-gray-800 mt-2">{value}</p>
         </div>
-        <div className={`w-12 h-12 bg-${color}-100 rounded-xl flex items-center justify-center`}>
-          <i className={`${icon} text-${color}-600 text-xl`}></i>
+        <div className={`w-12 h-12 rounded-xl ${color} flex items-center justify-center`}>
+          <i className={`${icon} text-white text-xl`}></i>
         </div>
       </div>
     </motion.div>
@@ -145,17 +145,17 @@ const TeacherDashboardHome = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-r from-[#4CAF50] to-[#45a049] rounded-xl p-6 text-white"
+        className="bg-gradient-to-r from-[#3B82F6] to-[#06B6D4] rounded-2xl p-6 text-white"
       >
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold mb-2">
               Welcome back, {teacherData?.name || 'Teacher'}!
             </h1>
-            <p className="text-green-100">
+            <p className="text-blue-100">
               {teacherData?.designation} • {teacherData?.department}
             </p>
-            <p className="text-green-100 text-sm mt-1">
+            <p className="text-blue-100 text-sm mt-1">
               Ready to inspire minds today? You have {stats.upcomingClasses} classes scheduled.
             </p>
           </div>
@@ -173,25 +173,25 @@ const TeacherDashboardHome = () => {
           title="Total Students"
           value={stats.totalStudents}
           icon="ri-user-3-line"
-          color="blue"
+          color="bg-blue-500"
         />
         <StatCard
           title="Active Courses"
           value={stats.activeCourses}
           icon="ri-book-line"
-          color="green"
+          color="bg-blue-600"
         />
         <StatCard
           title="Pending Reviews"
           value={stats.pendingAssignments}
           icon="ri-file-list-3-line"
-          color="orange"
+          color="bg-cyan-500"
         />
         <StatCard
           title="Classes Today"
           value={stats.upcomingClasses}
           icon="ri-calendar-line"
-          color="purple"
+          color="bg-cyan-600"
         />
       </div>
 
@@ -202,19 +202,19 @@ const TeacherDashboardHome = () => {
         transition={{ delay: 0.2 }}
         className="bg-white rounded-xl p-6 shadow-sm border border-gray-200"
       >
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">Quick Actions</h2>
+        <h2 className="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {quickActions.map((action, index) => (
             <Link
               key={index}
               to={action.link}
-              className={`p-4 rounded-xl border-2 border-dashed border-${action.color}-200 hover:border-${action.color}-300 hover:bg-${action.color}-50 transition-all duration-300 group`}
+              className="p-4 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 transition-all duration-300 text-center"
             >
               <div className="text-center">
-                <div className={`w-12 h-12 bg-${action.color}-100 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-300`}>
-                  <i className={`${action.icon} text-${action.color}-600 text-xl`}></i>
+                <div className="w-12 h-12 bg-gradient-to-br from-[#3B82F6]/20 to-[#06B6D4]/20 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-300">
+                  <i className={`${action.icon} text-[#3B82F6] text-xl`}></i>
                 </div>
-                <h3 className="font-semibold text-gray-800 mb-1">{action.title}</h3>
+                <h3 className="font-medium text-[#3B82F6] mb-1">{action.title}</h3>
                 <p className="text-sm text-gray-600">{action.description}</p>
               </div>
             </Link>
@@ -231,17 +231,17 @@ const TeacherDashboardHome = () => {
           className="bg-white rounded-xl p-6 shadow-sm border border-gray-200"
         >
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-gray-800">Today's Schedule</h2>
+            <h2 className="text-lg font-semibold text-gray-800">Today's Schedule</h2>
             <Link
               to="/teacher/dashboard/schedule"
-              className="text-[#4CAF50] hover:text-[#45a049] text-sm font-medium transition-colors"
+              className="text-[#3B82F6] hover:text-[#06B6D4] text-sm font-medium transition-colors"
             >
               View All
             </Link>
           </div>
           <div className="space-y-4">
             {upcomingClasses.map((class_item) => (
-              <div key={class_item.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+              <div key={class_item.id} className="flex items-center justify-between p-4 bg-gradient-to-br from-[#3B82F6]/5 to-[#06B6D4]/5 rounded-lg hover:from-[#3B82F6]/10 hover:to-[#06B6D4]/10 transition-colors">
                 <div>
                   <h3 className="font-semibold text-gray-800">{class_item.course}</h3>
                   <p className="text-sm text-gray-600">{class_item.code} • {class_item.room}</p>
@@ -249,7 +249,7 @@ const TeacherDashboardHome = () => {
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-medium text-gray-800">{class_item.time}</p>
-                  <button className="text-[#4CAF50] hover:text-[#45a049] text-sm font-medium transition-colors">
+                  <button className="text-[#3B82F6] hover:text-[#06B6D4] text-sm font-medium transition-colors">
                     Take Attendance
                   </button>
                 </div>
@@ -265,12 +265,12 @@ const TeacherDashboardHome = () => {
           transition={{ delay: 0.4 }}
           className="bg-white rounded-xl p-6 shadow-sm border border-gray-200"
         >
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Recent Activities</h2>
+          <h2 className="text-lg font-semibold text-gray-800 mb-4">Recent Activities</h2>
           <div className="space-y-4">
             {recentActivities.map((activity) => (
               <div key={activity.id} className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                <div className={`p-2 rounded-lg bg-${activity.color}-50 flex-shrink-0`}>
-                  <i className={`${activity.icon} text-${activity.color}-600 text-sm`}></i>
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#3B82F6]/20 to-[#06B6D4]/20 flex items-center justify-center">
+                  <i className={`${activity.icon} text-[#3B82F6]`}></i>
                 </div>
                 <div className="flex-1">
                   <h4 className="font-medium text-gray-800 text-sm">{activity.title}</h4>
@@ -290,19 +290,19 @@ const TeacherDashboardHome = () => {
         transition={{ delay: 0.5 }}
         className="bg-white rounded-xl p-6 shadow-sm border border-gray-200"
       >
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">This Week Overview</h2>
+        <h2 className="text-lg font-semibold text-gray-800 mb-4">This Week Overview</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="text-center p-4 bg-blue-50 rounded-lg">
+          <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg">
             <div className="text-2xl font-bold text-blue-600">24</div>
             <div className="text-sm text-blue-600 font-medium">Classes Conducted</div>
           </div>
-          <div className="text-center p-4 bg-green-50 rounded-lg">
-            <div className="text-2xl font-bold text-green-600">89%</div>
-            <div className="text-sm text-green-600 font-medium">Average Attendance</div>
+          <div className="text-center p-4 bg-gradient-to-br from-cyan-50 to-cyan-100 rounded-lg">
+            <div className="text-2xl font-bold text-cyan-600">89%</div>
+            <div className="text-sm text-cyan-600 font-medium">Average Attendance</div>
           </div>
-          <div className="text-center p-4 bg-purple-50 rounded-lg">
-            <div className="text-2xl font-bold text-purple-600">18</div>
-            <div className="text-sm text-purple-600 font-medium">Assignments Graded</div>
+          <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-lg">
+            <div className="text-2xl font-bold text-blue-600">18</div>
+            <div className="text-sm text-blue-600 font-medium">Assignments Graded</div>
           </div>
         </div>
       </motion.div>

@@ -9,8 +9,8 @@ const FormSection = memo(({ icon, title, children }) => (
         className="bg-white/50 rounded-xl p-6 backdrop-blur-sm border border-gray-100 shadow-sm"
     >
         <div className="flex items-center gap-4 mb-6">
-            <div className="h-10 w-10 rounded-xl bg-[#4CAF50]/10 flex items-center justify-center">
-                <i className={`${icon} text-xl text-[#4CAF50]`}></i>
+            <div className="h-10 w-10 rounded-xl bg-[#3B82F6]/10 flex items-center justify-center">
+                <i className={`${icon} text-xl text-[#3B82F6]`}></i>
             </div>
             <h3 className="text-xl font-bold text-[#333333]">{title}</h3>
         </div>
@@ -92,12 +92,12 @@ const DocumentUpload = memo(({ label, fieldName, file, preview, onChange, requir
         <div className="flex flex-col gap-4">
             <div className="flex items-center justify-center w-full">
                 <label className={`flex flex-col w-full h-32 border-2 border-dashed rounded-lg cursor-pointer 
-                    ${file ? 'border-[#4CAF50] bg-[#4CAF50]/5' : 'border-gray-300 bg-[#F8F9F4]'} 
+                    ${file ? 'border-[#3B82F6] bg-[#3B82F6]/5' : 'border-gray-300 bg-[#F8F9F4]'} 
                     hover:bg-[#F1F3F1] transition-colors duration-300`}>
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
                         {!file ? (
                             <>
-                                <svg className="w-8 h-8 mb-4 text-[#4CAF50]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="w-8 h-8 mb-4 text-[#3B82F6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                                 </svg>
                                 <p className="mb-2 text-sm text-[#6C757D]">
@@ -106,7 +106,7 @@ const DocumentUpload = memo(({ label, fieldName, file, preview, onChange, requir
                                 <p className="text-xs text-[#6C757D]">JPG, PNG (Max 5MB)</p>
                             </>
                         ) : (
-                            <div className="flex items-center gap-2 text-[#4CAF50]">
+                            <div className="flex items-center gap-2 text-[#3B82F6]">
                                 <i className="ri-check-line text-xl"></i>
                                 <span className="text-sm font-medium">{file.name}</span>
                             </div>
@@ -164,19 +164,19 @@ const TeacherForm = ({
     const inputClasses = `
         w-full p-3 rounded-xl 
         bg-[#F8F9F4] border-2 border-transparent
-        focus:border-[#4CAF50]
-        focus:ring-4 focus:ring-[#4CAF50]/10 
+        focus:border-[#3B82F6]
+        focus:ring-4 focus:ring-[#3B82F6]/10 
         focus:bg-white
-        hover:border-[#4CAF50]/30
+        hover:border-[#3B82F6]/30
         transition-all duration-300 ease-in-out
         text-[#333333] placeholder-[#6C757D]/60
-        focus:placeholder-[#4CAF50]/50
-        focus:shadow-lg focus:shadow-[#4CAF50]/5
+        focus:placeholder-[#3B82F6]/50
+        focus:shadow-lg focus:shadow-[#3B82F6]/5
         outline-none
     `;
 
     const selectClasses = inputClasses + ` appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,${encodeURIComponent(
-        `<svg width="20" height="20" fill="none" stroke="%234CAF50" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>`
+        `<svg width="20" height="20" fill="none" stroke="%233B82F6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>`
     )}')] bg-[length:20px_20px] bg-no-repeat bg-[center_right_1rem] pr-12`;
 
     const steps = [
@@ -388,7 +388,7 @@ const TeacherForm = ({
                 className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl"
             >
                 {/* Header */}
-                <div className="relative h-32 bg-gradient-to-r from-[#4CAF50]/20 to-[#45a049]/20">
+                <div className="relative h-32 bg-gradient-to-r from-[#3B82F6]/20 to-[#2563EB]/20">
                     <div className="absolute inset-0 px-8 py-6">
                         <div className="flex justify-between items-center">
                             <div>
@@ -417,16 +417,16 @@ const TeacherForm = ({
                             <div key={step.number} className="flex items-center">
                                 <div className={`flex items-center gap-3 ${
                                     step.number === currentStep 
-                                        ? 'text-[#4CAF50]' 
+                                        ? 'text-[#3B82F6]' 
                                         : step.number < currentStep 
-                                        ? 'text-[#4CAF50]' 
+                                        ? 'text-[#3B82F6]' 
                                         : 'text-gray-400'
                                 }`}>
                                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
                                         step.number === currentStep 
-                                            ? 'bg-[#4CAF50] text-white' 
+                                            ? 'bg-[#3B82F6] text-white' 
                                             : step.number < currentStep 
-                                            ? 'bg-[#4CAF50] text-white' 
+                                            ? 'bg-[#3B82F6] text-white' 
                                             : 'bg-gray-200 text-gray-500'
                                     }`}>
                                         {step.number < currentStep ? (
@@ -439,7 +439,7 @@ const TeacherForm = ({
                                 </div>
                                 {step.number < steps.length && (
                                     <div className={`w-8 h-0.5 mx-4 ${
-                                        step.number < currentStep ? 'bg-[#4CAF50]' : 'bg-gray-200'
+                                        step.number < currentStep ? 'bg-[#3B82F6]' : 'bg-gray-200'
                                     }`}></div>
                                 )}
                             </div>
@@ -712,7 +712,7 @@ const TeacherForm = ({
                                 <button
                                     type="button"
                                     onClick={nextStep}
-                                    className="flex items-center gap-2 px-6 py-3 bg-[#4CAF50] text-white rounded-xl font-medium hover:bg-[#45a049] transition-colors"
+                                    className="flex items-center gap-2 px-6 py-3 bg-[#3B82F6] text-white rounded-xl font-medium hover:bg-[#2563EB] transition-colors"
                                 >
                                     Next
                                     <i className="ri-arrow-right-line"></i>
@@ -721,7 +721,7 @@ const TeacherForm = ({
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="flex items-center gap-2 px-6 py-3 bg-[#4CAF50] text-white rounded-xl font-medium hover:bg-[#45a049] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="flex items-center gap-2 px-6 py-3 bg-[#3B82F6] text-white rounded-xl font-medium hover:bg-[#2563EB] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {loading ? (
                                         <>

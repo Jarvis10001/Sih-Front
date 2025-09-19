@@ -79,7 +79,7 @@ const StudentVerification = () => {
             case 'pending':
                 return 'bg-yellow-100 text-yellow-800';
             case 'verified':
-                return 'bg-green-100 text-green-800';
+                return 'bg-blue-100 text-blue-800';
             case 'rejected':
                 return 'bg-red-100 text-red-800';
             default:
@@ -95,13 +95,13 @@ const StudentVerification = () => {
         return (
             <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
                 {/* Header */}
-                <div className="bg-gradient-to-r from-[#4CAF50] to-[#45a049] p-6 text-white">
+                <div className="bg-gradient-to-r from-[#3B82F6] to-[#2563EB] p-6 text-white">
                     <div className="flex items-center justify-between">
                         <div>
                             <h2 className="text-2xl font-bold">
                                 {selectedApplication.personalInfo?.fullName}
                             </h2>
-                            <p className="text-green-100">
+                            <p className="text-blue-100">
                                 Application ID: {selectedApplication.applicationId}
                             </p>
                         </div>
@@ -121,7 +121,7 @@ const StudentVerification = () => {
                     {/* Personal Information */}
                     <div>
                         <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-                            <i className="ri-user-line mr-2 text-[#4CAF50]"></i>
+                            <i className="ri-user-line mr-2 text-[#3B82F6]"></i>
                             Personal Information
                         </h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-xl">
@@ -155,7 +155,7 @@ const StudentVerification = () => {
                     {/* Academic Information */}
                     <div>
                         <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-                            <i className="ri-graduation-cap-line mr-2 text-[#4CAF50]"></i>
+                            <i className="ri-graduation-cap-line mr-2 text-[#3B82F6]"></i>
                             Academic Information
                         </h3>
                         <div className="bg-gray-50 p-4 rounded-xl">
@@ -179,30 +179,41 @@ const StudentVerification = () => {
                     {/* Documents Section */}
                     <div>
                         <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-                            <i className="ri-file-list-3-line mr-2 text-[#4CAF50]"></i>
+                            <i className="ri-file-list-3-line mr-2 text-[#3B82F6]"></i>
                             Submitted Documents
                         </h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {selectedApplication.documents && Object.entries(selectedApplication.documents).map(([docType, docUrl]) => (
+                            {selectedApplication.documents && Object.entries(selectedApplication.documents).map(([docType, docData]) => (
                                 <div key={docType} className="bg-gray-50 p-4 rounded-xl">
                                     <div className="flex items-center justify-between">
                                         <div>
                                             <p className="font-medium text-gray-900 capitalize">
                                                 {docType.replace(/([A-Z])/g, ' $1').trim()}
                                             </p>
-                                            <p className="text-sm text-gray-600">Uploaded document</p>
+                                            <p className="text-sm text-gray-600">
+                                                {docData.originalName || 'Uploaded document'}
+                                            </p>
+                                            <p className="text-xs text-gray-500">
+                                                Status: <span className={`font-medium ${
+                                                    docData.verificationStatus === 'verified' ? 'text-blue-600' :
+                                                    docData.verificationStatus === 'rejected' ? 'text-red-600' :
+                                                    'text-yellow-600'
+                                                }`}>
+                                                    {docData.verificationStatus || 'pending'}
+                                                </span>
+                                            </p>
                                         </div>
                                         <div className="flex space-x-2">
                                             <button
-                                                onClick={() => window.open(docUrl, '_blank')}
+                                                onClick={() => window.open(docData.url, '_blank')}
                                                 className="bg-blue-100 text-blue-600 p-2 rounded-lg hover:bg-blue-200 transition-colors"
                                                 title="View Document"
                                             >
                                                 <i className="ri-eye-line"></i>
                                             </button>
                                             <button
-                                                onClick={() => window.open(docUrl, '_blank')}
-                                                className="bg-green-100 text-green-600 p-2 rounded-lg hover:bg-green-200 transition-colors"
+                                                onClick={() => window.open(docData.url, '_blank')}
+                                                className="bg-blue-100 text-blue-600 p-2 rounded-lg hover:bg-blue-200 transition-colors"
                                                 title="Download Document"
                                             >
                                                 <i className="ri-download-line"></i>
@@ -217,7 +228,7 @@ const StudentVerification = () => {
                     {/* Verification Section */}
                     <div>
                         <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-                            <i className="ri-checkbox-circle-line mr-2 text-[#4CAF50]"></i>
+                            <i className="ri-checkbox-circle-line mr-2 text-[#3B82F6]"></i>
                             Verification & Student ID Assignment
                         </h3>
                         <div className="bg-gray-50 p-6 rounded-xl space-y-4">
@@ -231,7 +242,7 @@ const StudentVerification = () => {
                                         type="text"
                                         value={suggestedStudentId}
                                         onChange={(e) => setStudentIdPrefix(e.target.value)}
-                                        className="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:border-[#4CAF50]"
+                                        className="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3B82F6] focus:border-[#3B82F6]"
                                         placeholder="Enter student ID"
                                     />
                                     <button
@@ -253,7 +264,7 @@ const StudentVerification = () => {
                                     value={verificationNotes}
                                     onChange={(e) => setVerificationNotes(e.target.value)}
                                     rows={3}
-                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:border-[#4CAF50]"
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3B82F6] focus:border-[#3B82F6]"
                                     placeholder="Add any notes about the verification process..."
                                 />
                             </div>
@@ -273,7 +284,7 @@ const StudentVerification = () => {
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
                                     onClick={() => handleVerifyStudent(selectedApplication._id, 'verified', suggestedStudentId)}
-                                    className="bg-[#4CAF50] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[#45a049] transition-colors flex items-center"
+                                    className="bg-[#3B82F6] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[#2563EB] transition-colors flex items-center"
                                 >
                                     <i className="ri-check-circle-line mr-2"></i>
                                     Verify & Assign ID
@@ -296,7 +307,7 @@ const StudentVerification = () => {
                         <select
                             value={filter}
                             onChange={(e) => setFilter(e.target.value)}
-                            className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#4CAF50] focus:border-[#4CAF50]"
+                            className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#3B82F6] focus:border-[#3B82F6]"
                         >
                             <option value="pending">Pending Applications</option>
                             <option value="verified">Verified Students</option>
@@ -318,15 +329,15 @@ const StudentVerification = () => {
                             <i className="ri-time-line text-2xl text-yellow-600"></i>
                         </div>
                     </div>
-                    <div className="bg-green-50 p-4 rounded-xl border border-green-200">
+                    <div className="bg-blue-50 p-4 rounded-xl border border-blue-200">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm font-medium text-green-700">Verified</p>
-                                <p className="text-2xl font-bold text-green-900">
+                                <p className="text-sm font-medium text-blue-700">Verified</p>
+                                <p className="text-2xl font-bold text-blue-900">
                                     {applications.filter(app => app.verificationStatus === 'verified').length}
                                 </p>
                             </div>
-                            <i className="ri-check-line text-2xl text-green-600"></i>
+                            <i className="ri-check-line text-2xl text-blue-600"></i>
                         </div>
                     </div>
                     <div className="bg-red-50 p-4 rounded-xl border border-red-200">
@@ -378,7 +389,7 @@ const StudentVerification = () => {
                                     >
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
-                                                <div className="w-10 h-10 bg-gradient-to-br from-[#4CAF50] to-[#45a049] rounded-full flex items-center justify-center text-white font-semibold">
+                                                <div className="w-10 h-10 bg-gradient-to-br from-[#3B82F6] to-[#2563EB] rounded-full flex items-center justify-center text-white font-semibold">
                                                     {application.personalInfo?.fullName?.charAt(0).toUpperCase()}
                                                 </div>
                                                 <div className="ml-4">
@@ -409,7 +420,7 @@ const StudentVerification = () => {
                                                     setSelectedApplication(application);
                                                     setViewMode('detail');
                                                 }}
-                                                className="text-[#4CAF50] hover:text-[#45a049] p-2 rounded-lg hover:bg-green-50 transition-colors"
+                                                className="text-[#3B82F6] hover:text-[#2563EB] p-2 rounded-lg hover:bg-blue-50 transition-colors"
                                                 title="Review Application"
                                             >
                                                 <i className="ri-eye-line"></i>

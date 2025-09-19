@@ -12,23 +12,23 @@ const PaymentPage = () => {
     const [paymentStatus, setPaymentStatus] = useState(null);
     const [error, setError] = useState(null);
     const [fees, setFees] = useState({
-        admissionFee: 50000,
-        registrationFee: 5000,
-        securityDeposit: 10000,
-        total: 65000
+        admissionFee: 5000,
+        registrationFee: 500,
+        securityDeposit: 1000,
+        total: 6500
     });
 
     const inputClasses = `
         w-full p-3 rounded-xl 
         bg-[#F8F9F4] border-2 border-transparent
-        focus:border-[#4CAF50]
-        focus:ring-4 focus:ring-[#4CAF50]/10 
+        focus:border-[#3B82F6]
+        focus:ring-4 focus:ring-[#3B82F6]/10 
         focus:bg-white
-        hover:border-[#4CAF50]/30
+        hover:border-[#3B82F6]/30
         transition-all duration-300 ease-in-out
         text-[#333333] placeholder-[#6C757D]/60
-        focus:placeholder-[#4CAF50]/50
-        focus:shadow-lg focus:shadow-[#4CAF50]/5
+        focus:placeholder-[#3B82F6]/50
+        focus:shadow-lg focus:shadow-[#3B82F6]/5
         outline-none
     `;
 
@@ -170,7 +170,20 @@ const PaymentPage = () => {
                     contact: admissionData?.personalInfo?.mobileNo
                 },
                 theme: {
-                    color: '#4CAF50'
+                    color: '#3B82F6'
+                },
+                config: {
+                    display: {
+                        language: 'en'
+                    }
+                },
+                method: {
+                    card: true,
+                    netbanking: true,
+                    wallet: true,
+                    upi: true,
+                    paylater: true,
+                    emi: true
                 },
                 handler: async function (response) {
                     try {
@@ -237,21 +250,21 @@ const PaymentPage = () => {
     if (isLoading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#4CAF50]"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#3B82F6]"></div>
             </div>
         );
     }
 
     if (paymentStatus && paymentStatus.status === 'completed') {
         return (
-            <div className="max-w-4xl mx-auto my-10 px-4">
+            <div className="max-w-4xl mx-auto my-10 px-4 min-h-screen bg-gradient-to-br from-[#3B82F6]/5 via-white to-[#06B6D4]/5">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden"
                 >
                     {/* Success Header */}
-                    <div className="relative h-32 bg-gradient-to-r from-green-500/20 to-green-600/20">
+                    <div className="relative h-32 bg-gradient-to-r from-blue-500/20 to-blue-600/20">
                         <div className="absolute inset-0 px-8 py-6">
                             <div className="flex justify-between items-center">
                                 <div>
@@ -262,8 +275,8 @@ const PaymentPage = () => {
                                         Your admission fee has been paid successfully
                                     </p>
                                 </div>
-                                <div className="h-12 w-12 bg-green-100 rounded-xl flex items-center justify-center">
-                                    <i className="ri-check-line text-2xl text-green-600"></i>
+                                <div className="h-12 w-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                                    <i className="ri-check-line text-2xl text-blue-600"></i>
                                 </div>
                             </div>
                         </div>
@@ -271,8 +284,8 @@ const PaymentPage = () => {
 
                     <div className="p-8">
                         <div className="text-center mb-8">
-                            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <i className="ri-check-line text-3xl text-green-600"></i>
+                            <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i className="ri-check-line text-3xl text-blue-600"></i>
                             </div>
                             <h3 className="text-2xl font-bold text-[#333333] mb-2">Admission Confirmed!</h3>
                             <p className="text-[#6C757D]">
@@ -337,13 +350,13 @@ const PaymentPage = () => {
                         <div className="flex gap-4">
                             <button
                                 onClick={() => navigate('/dashboard')}
-                                className="flex-1 px-6 py-3 bg-[#4CAF50] text-white rounded-xl font-semibold hover:bg-[#45a049] transition-colors"
+                                className="flex-1 px-6 py-3 bg-[#3B82F6] text-white rounded-xl font-semibold hover:bg-[#2563EB] transition-colors"
                             >
                                 Go to Dashboard
                             </button>
                             <button
                                 onClick={() => window.print()}
-                                className="px-6 py-3 border-2 border-[#4CAF50] text-[#4CAF50] rounded-xl font-semibold hover:bg-[#4CAF50]/10 transition-colors"
+                                className="px-6 py-3 border-2 border-[#3B82F6] text-[#3B82F6] rounded-xl font-semibold hover:bg-[#3B82F6]/10 transition-colors"
                             >
                                 Print Receipt
                             </button>
@@ -355,7 +368,7 @@ const PaymentPage = () => {
     }
 
     return (
-        <div className="max-w-4xl mx-auto my-10 px-4">
+        <div className="max-w-4xl mx-auto my-10 px-4 min-h-screen bg-gradient-to-br from-[#3B82F6]/5 via-white to-[#06B6D4]/5">
             {/* Error banner */}
             {error && (
                 <div className="mb-6 bg-red-50 border border-red-200 rounded-xl p-4 shadow-sm">
@@ -378,10 +391,10 @@ const PaymentPage = () => {
             )}
 
             {/* Notification banner */}
-            <div className="mb-6 bg-[#4CAF50]/10 border border-[#4CAF50]/20 rounded-xl p-4 shadow-sm">
+            <div className="mb-6 bg-[#3B82F6]/10 border border-[#3B82F6]/20 rounded-xl p-4 shadow-sm">
                 <div className="flex items-center gap-3">
                     <div className="flex-shrink-0">
-                        <i className="ri-information-line text-xl text-[#4CAF50]"></i>
+                        <i className="ri-information-line text-xl text-[#3B82F6]"></i>
                     </div>
                     <div>
                         <h4 className="text-[#333333] font-medium">Admission Fee Payment</h4>
@@ -394,7 +407,7 @@ const PaymentPage = () => {
 
             <div className="bg-white/70 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
                 {/* Header */}
-                <div className="relative h-32 bg-gradient-to-r from-[#4CAF50]/20 to-[#45a049]/20">
+                <div className="relative h-32 bg-gradient-to-r from-[#3B82F6]/20 to-[#2563EB]/20">
                     <div className="absolute inset-0 px-8 py-6">
                         <div className="flex justify-between items-center">
                             <div>
@@ -406,7 +419,7 @@ const PaymentPage = () => {
                                 </p>
                             </div>
                             <div className="h-12 w-12 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center">
-                                <i className="ri-bank-card-line text-2xl text-[#4CAF50]"></i>
+                                <i className="ri-bank-card-line text-2xl text-[#3B82F6]"></i>
                             </div>
                         </div>
                     </div>
@@ -420,8 +433,8 @@ const PaymentPage = () => {
                         className="bg-white/50 rounded-xl p-6 backdrop-blur-sm border border-gray-100 shadow-sm mb-8"
                     >
                         <div className="flex items-center gap-4 mb-6">
-                            <div className="h-10 w-10 rounded-xl bg-[#4CAF50]/10 flex items-center justify-center">
-                                <i className="ri-user-line text-xl text-[#4CAF50]"></i>
+                            <div className="h-10 w-10 rounded-xl bg-[#3B82F6]/10 flex items-center justify-center">
+                                <i className="ri-user-line text-xl text-[#3B82F6]"></i>
                             </div>
                             <h3 className="text-xl font-bold text-[#333333]">Student Information</h3>
                         </div>
@@ -473,8 +486,8 @@ const PaymentPage = () => {
                         className="bg-white/50 rounded-xl p-6 backdrop-blur-sm border border-gray-100 shadow-sm mb-8"
                     >
                         <div className="flex items-center gap-4 mb-6">
-                            <div className="h-10 w-10 rounded-xl bg-[#4CAF50]/10 flex items-center justify-center">
-                                <i className="ri-money-rupee-circle-line text-xl text-[#4CAF50]"></i>
+                            <div className="h-10 w-10 rounded-xl bg-[#3B82F6]/10 flex items-center justify-center">
+                                <i className="ri-money-rupee-circle-line text-xl text-[#3B82F6]"></i>
                             </div>
                             <h3 className="text-xl font-bold text-[#333333]">Fee Structure</h3>
                         </div>
@@ -492,9 +505,9 @@ const PaymentPage = () => {
                                 <span className="text-[#333333] font-medium">Security Deposit</span>
                                 <span className="text-[#333333] font-semibold">₹{fees.securityDeposit.toLocaleString()}</span>
                             </div>
-                            <div className="flex justify-between items-center py-4 bg-[#4CAF50]/10 rounded-lg px-4">
+                            <div className="flex justify-between items-center py-4 bg-[#3B82F6]/10 rounded-lg px-4">
                                 <span className="text-[#333333] font-bold text-lg">Total Amount</span>
-                                <span className="text-[#4CAF50] font-bold text-xl">₹{fees.total.toLocaleString()}</span>
+                                <span className="text-[#3B82F6] font-bold text-xl">₹{fees.total.toLocaleString()}</span>
                             </div>
                         </div>
                     </motion.div>
@@ -506,8 +519,8 @@ const PaymentPage = () => {
                         className="bg-white/50 rounded-xl p-6 backdrop-blur-sm border border-gray-100 shadow-sm mb-8"
                     >
                         <div className="flex items-center gap-4 mb-6">
-                            <div className="h-10 w-10 rounded-xl bg-[#4CAF50]/10 flex items-center justify-center">
-                                <i className="ri-secure-payment-line text-xl text-[#4CAF50]"></i>
+                            <div className="h-10 w-10 rounded-xl bg-[#3B82F6]/10 flex items-center justify-center">
+                                <i className="ri-secure-payment-line text-xl text-[#3B82F6]"></i>
                             </div>
                             <h3 className="text-xl font-bold text-[#333333]">Secure Payment</h3>
                         </div>
@@ -529,7 +542,7 @@ const PaymentPage = () => {
 
                         <div className="text-center">
                             <p className="text-sm text-[#6C757D] mb-4">
-                                <i className="ri-shield-check-line text-[#4CAF50] mr-1"></i>
+                                <i className="ri-shield-check-line text-[#3B82F6] mr-1"></i>
                                 Payments are secured by SSL encryption and processed through Razorpay
                             </p>
                         </div>
@@ -542,7 +555,7 @@ const PaymentPage = () => {
                             whileTap={{ scale: 0.99 }}
                             onClick={handlePayment}
                             disabled={paymentLoading}
-                            className={`w-full p-4 bg-gradient-to-r from-[#4CAF50] to-[#45a049] text-white rounded-xl font-semibold shadow-lg hover:shadow-xl hover:shadow-[#4CAF50]/20 transition-all duration-300 ${paymentLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            className={`w-full p-4 bg-gradient-to-r from-[#3B82F6] to-[#2563EB] text-white rounded-xl font-semibold shadow-lg hover:shadow-xl hover:shadow-[#3B82F6]/20 transition-all duration-300 ${paymentLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
                             <span className="flex items-center justify-center gap-2">
                                 {paymentLoading ? (
@@ -561,11 +574,11 @@ const PaymentPage = () => {
                         
                         <p className="text-center mt-4 text-sm text-[#6C757D]">
                             By proceeding with payment, you agree to our{' '}
-                            <a href="#" className="text-[#4CAF50] hover:text-[#45a049] underline">
+                            <a href="#" className="text-[#3B82F6] hover:text-[#2563EB] underline">
                                 Terms and Conditions
                             </a>
                             {' '}and{' '}
-                            <a href="#" className="text-[#4CAF50] hover:text-[#45a049] underline">
+                            <a href="#" className="text-[#3B82F6] hover:text-[#2563EB] underline">
                                 Refund Policy
                             </a>
                         </p>
